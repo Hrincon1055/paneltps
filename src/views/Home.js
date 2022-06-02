@@ -1,49 +1,90 @@
-import { Card, CardHeader, CardBody, CardTitle, CardText, CardLink } from 'reactstrap'
+/* eslint-disable comma-dangle */
+/* eslint-disable semi */
+import { useEffect, useState } from "react";
+import { Table, Breadcrumb, BreadcrumbItem, Progress } from "reactstrap";
+import { Link, useHistory } from "react-router-dom";
+import axios from "axios";
 
+// INICIO
 const Home = () => {
+  // HOOKS
+  const history = useHistory();
+  // STATE
+  const [departamentos, setDepartamentos] = useState(null);
+  // EFFECT
+  useEffect(() => {
+    (async () => {
+      const { data } = await axios.get("http://localhost:3004/departamentos");
+      setDepartamentos(data);
+    })();
+  }, []);
+  // FUNCIONES
+  const handleClick = () => {
+    history.push(`/municipios?zona=xxx`);
+  };
+  // RENDER
   return (
-    <div>
-      <Card>
-        <CardHeader>
-          <CardTitle>Kick start your project 🚀</CardTitle>
-        </CardHeader>
-        <CardBody>
-          <CardText>All the best for your new project.</CardText>
-          <CardText>
-            Please make sure to read our{' '}
-            <CardLink
-              href='https://pixinvent.com/demo/vuexy-react-admin-dashboard-template/documentation/'
-              target='_blank'
-            >
-              Template Documentation
-            </CardLink>{' '}
-            to understand where to go from here and how to use our template.
-          </CardText>
-        </CardBody>
-      </Card>
+    <>
+      <Breadcrumb className="breadcrumb-slash">
+        <BreadcrumbItem>
+          <Link to="#"> Home </Link>
+        </BreadcrumbItem>
+        <BreadcrumbItem>
+          <Link to="#"> municipios </Link>
+        </BreadcrumbItem>
+        <BreadcrumbItem>
+          <Link to="#"> zonas </Link>
+        </BreadcrumbItem>
+        <BreadcrumbItem>
+          <Link to="#"> puestos </Link>
+        </BreadcrumbItem>
+        <BreadcrumbItem>
+          <Link to="#"> mesas </Link>
+        </BreadcrumbItem>
+      </Breadcrumb>
 
-      <Card>
-        <CardHeader>
-          <CardTitle>Want to integrate JWT? 🔒</CardTitle>
-        </CardHeader>
-        <CardBody>
-          <CardText>
-            We carefully crafted JWT flow so you can implement JWT with ease and with minimum efforts.
-          </CardText>
-          <CardText>
-            Please read our{' '}
-            <CardLink
-              href='https://pixinvent.com/demo/vuexy-react-admin-dashboard-template/documentation/docs/development/auth'
-              target='_blank'
-            >
-              JWT Documentation
-            </CardLink>{' '}
-            to get more out of JWT authentication.
-          </CardText>
-        </CardBody>
-      </Card>
-    </div>
-  )
-}
+      <div className="input-group">
+        <div className="form-outline">
+          <input type="search" clasNames="form-control" />
+          <label className="form-label">Search</label>
+        </div>
+        <button type="button" className="btn btn-primary">
+          <i className="fas fa-search"></i>
+        </button>
+      </div>
 
-export default Home
+      <Table hover responsive className="mt-1">
+        <thead>
+          <tr>
+            <th>Departamento</th>
+            <th>Esperados</th>
+            <th>Publicados</th>
+            <th>#Avance</th>
+            <th>Sin Publicar</th>
+            <th>E11 Certificados</th>
+            <th>Faltantes</th>
+          </tr>
+        </thead>
+        <tbody>
+          {departamentos &&
+            departamentos.map((departamento, index) => (
+              <tr onClick={handleClick} key={index}>
+                <td>{departamento.departamento.toUpperCase()}</td>
+                <td>{departamento.esperados}</td>
+                <td>{departamento.publicados}</td>
+                <td>
+                  <span>{departamento.avance}%</span>
+                  <Progress value={departamento.avance} />
+                </td>
+                <td>{departamento.sin_publicar}</td>
+                <td>{departamento.e11_cerificados}</td>
+                <td>{departamento.faltantes}</td>
+              </tr>
+            ))}
+        </tbody>
+      </Table>
+    </>
+  );
+};
+
+export default Home;

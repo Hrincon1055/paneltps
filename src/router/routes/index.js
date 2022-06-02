@@ -1,34 +1,40 @@
-import { lazy } from 'react'
+/* eslint-disable semi */
+/* eslint-disable comma-dangle */
+import { lazy } from "react";
 
 // ** Document title
-const TemplateTitle = '%s - Vuexy React Admin Template'
+const TemplateTitle = "%s - Vuexy React Admin Template";
 
 // ** Default Route
-const DefaultRoute = '/home'
+const DefaultRoute = "/home";
 
 // ** Merge Routes
 const Routes = [
   {
-    path: '/home',
-    component: lazy(() => import('../../views/Home'))
+    path: "/home",
+    component: lazy(() => import("../../views/Home")),
   },
   {
-    path: '/second-page',
-    component: lazy(() => import('../../views/SecondPage'))
+    path: "/second-page",
+    component: lazy(() => import("../../views/SecondPage")),
   },
   {
-    path: '/login',
-    component: lazy(() => import('../../views/Login')),
-    layout: 'BlankLayout',
+    path: "/municipios",
+    component: lazy(() => import("../../views/Municipios")),
+  },
+  {
+    path: "/login",
+    component: lazy(() => import("../../views/Login")),
+    layout: "BlankLayout",
     meta: {
-      authRoute: true
-    }
+      authRoute: true,
+    },
   },
   {
-    path: '/error',
-    component: lazy(() => import('../../views/Error')),
-    layout: 'BlankLayout'
-  }
-]
+    path: "/error",
+    component: lazy(() => import("../../views/Error")),
+    layout: "BlankLayout",
+  },
+];
 
-export { DefaultRoute, TemplateTitle, Routes }
+export { DefaultRoute, TemplateTitle, Routes };
