@@ -43,16 +43,6 @@ const Home = () => {
         </BreadcrumbItem>
       </Breadcrumb>
 
-      <div className="input-group">
-        <div className="form-outline">
-          <input type="search" clasNames="form-control" />
-          <label className="form-label">Search</label>
-        </div>
-        <button type="button" className="btn btn-primary">
-          <i className="fas fa-search"></i>
-        </button>
-      </div>
-
       <Table hover responsive className="mt-1">
         <thead>
           <tr>
