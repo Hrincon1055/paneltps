@@ -23,7 +23,7 @@ const Home = () => {
   const history = useHistory();
   // STATE
   const [departamentos, setDepartamentos] = useState(null);
-  // const [currentPage, setCurrentPage] = useState(0);
+  const [currentPage, setCurrentPage] = useState(0);
   const [search, setSearch] = useState("");
   // EFFECT
   useEffect(() => {
@@ -37,28 +37,37 @@ const Home = () => {
   const handleClick = () => {
     history.push(`/municipios?zona=xxx`);
   };
-  // const filtrarDepartamentos = () => {
-  //   if(search.length === 0){
-
-  //   }
-  // };
-  // const nextPage = () => {
-  //   if (
-  //     departamentos.filter((departamento) =>
-  //       departamento.departamento
-  //         .toLowerCase()
-  //         .includes(search.toLocaleLowerCase())
-  //     ).length >
-  //     currentPage + 5
-  //   ) {
-  //     setCurrentPage(currentPage + 5);
-  //   }
-  // };
+  const filteredDepartamentos = () => {
+    if (search.length === 0) {
+      return departamentos.slice(currentPage, currentPage + 5);
+    }
+    const filterd = departamentos.filter((departamento) => {
+      return departamento.departamento
+        .toLowerCase()
+        .includes(search.toLowerCase());
+    });
+    return filterd.slice(currentPage, currentPage + 5);
+  };
+  const nextPage = () => {
+    if (
+      departamentos.filter((departamento) =>
+        departamento.departamento
+          .toLowerCase()
+          .includes(search.toLocaleLowerCase())
+      ).length >
+      currentPage + 5
+    ) {
+      setCurrentPage(currentPage + 5);
+    }
+  };
+  const prevPage = () => {
+    if (currentPage > 0) {
+      setCurrentPage(currentPage - 5);
+    }
+  };
   const onSearchChange = (e) => {
-    // setCurrentPage(0);
-    // setSearch(e.target.value);
-    console.log("Home LINE 60 =>", e.target.value);
-    setSearch();
+    setCurrentPage(0);
+    setSearch(e.target.value);
   };
   // RENDER
   return (
@@ -69,7 +78,7 @@ const Home = () => {
         </CardHeader>
         <Row className="mx-0 mt-1 mb-50 justify-content-between">
           <Col xl="2" md="2" ms="2">
-            <div className="mb-1">
+            <div>
               <Input type="select" name="select" id="select-basic">
                 <option>E 11</option>
                 <option>E 14</option>
@@ -78,7 +87,8 @@ const Home = () => {
           </Col>
           <Col
             className="d-flex align-items-center justify-content-sm-end mt-sm-0 mt-1"
-            sm="6"
+            sm="12"
+            md="6"
           >
             <Label className="me-1" for="search-input">
               Search
@@ -87,8 +97,10 @@ const Home = () => {
               className="dataTable-filter"
               type="text"
               bsSize="md"
+              name="search"
+              id="search"
               value={search}
-              onChange={onSearchChange}
+              onChange={(e) => onSearchChange(e)}
             />
           </Col>
         </Row>
@@ -106,7 +118,7 @@ const Home = () => {
           </thead>
           <tbody>
             {departamentos &&
-              departamentos.map((departamento, index) => (
+              filteredDepartamentos().map((departamento, index) => (
                 <tr onClick={handleClick} key={index}>
                   <td>{departamento.departamento.toUpperCase()}</td>
                   <td>{departamento.esperados}</td>
@@ -124,10 +136,12 @@ const Home = () => {
         </Table>
       </Card>
       <div>
-        <Button color="primary" className="m-1">
+        <Button color="primary" className="m-1" onClick={prevPage}>
           Anterior
         </Button>
-        <Button color="primary">Siguiente</Button>
+        <Button color="primary" onClick={nextPage}>
+          Siguiente
+        </Button>
       </div>
     </>
   );
