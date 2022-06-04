@@ -15,4 +15,10 @@ export default [
     icon: <Mail size={20} />,
     navLink: "/second-page",
   },
+  {
+    id: "actas",
+    title: "Actas",
+    icon: <Mail size={20} />,
+    navLink: "/actas",
+  },
 ];
