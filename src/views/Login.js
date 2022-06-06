@@ -19,7 +19,7 @@ import "@styles/react/pages/page-authentication.scss";
 const LoginCover = () => {
   const { skin } = useSkin();
 
-  const illustration = skin === "dark" ? "login-v2-dark.svg" : "login-v2.svg",
+  const illustration = skin === "dark" ? "login_dark.svg" : "login_light.svg",
     source = require(`@src/assets/images/pages/${illustration}`).default;
 
   return (
