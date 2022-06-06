@@ -5,12 +5,14 @@ import { useEffect, useState } from "react";
 import {
   Card,
   CardBody,
+  CardFooter,
   CardHeader,
   CardText,
   CardTitle,
   Col,
   Input,
   Label,
+  Progress,
   Row,
 } from "reactstrap";
 
@@ -63,16 +65,14 @@ const Actas = () => {
         <Col>
           <Card>
             <CardHeader>
-              <CardTitle>Create Awesome</CardTitle>
+              <CardTitle className="text-center">Create Awesome</CardTitle>
             </CardHeader>
             <CardBody>
-              <CardText>This is your second page.</CardText>
-              <CardText>
-                Chocolate sesame snaps pie carrot cake pastry pie lollipop
-                muffin. Carrot cake dragée chupa chups jujubes. Macaroon
-                liquorice cookie wafer tart marzipan bonbon. Gingerbread jelly-o
-                dragée chocolate.
-              </CardText>
+              <Progress multi>
+                <Progress bar color="info" value="15" />
+                <Progress bar color="warning" value="20" />
+                <Progress bar color="danger" value="15" />
+              </Progress>
             </CardBody>
           </Card>
         </Col>
@@ -82,18 +82,16 @@ const Actas = () => {
               <CardTitle>Create Awesome</CardTitle>
             </CardHeader>
             <CardBody>
-              <CardText>This is your second page.</CardText>
-              <CardText>
-                Chocolate sesame snaps pie carrot cake pastry pie lollipop
-                muffin. Carrot cake dragée chupa chups jujubes. Macaroon
-                liquorice cookie wafer tart marzipan bonbon. Gingerbread jelly-o
-                dragée chocolate.
-              </CardText>
+              <Progress multi>
+                <Progress bar color="info" value="15" />
+                <Progress bar color="warning" value="20" />
+                <Progress bar color="danger" value="15" />
+              </Progress>
             </CardBody>
           </Card>
         </Col>
       </Row>
-      <Row className="mx-0 m-1  justify-content-between">
+      <Row className="mb-1 justify-content-between gap-1">
         <Col xl="2" md="2" ms="2">
           <div>
             <Input type="select" name="select" id="select-basic">
@@ -103,7 +101,7 @@ const Actas = () => {
           </div>
         </Col>
         <Col
-          className="d-flex align-items-center justify-content-sm-end mt-sm-0 mt-1"
+          className="d-flex align-items-center justify-content-sm-end mt-sm-0"
           sm="12"
           md="6"
         >
@@ -125,17 +123,54 @@ const Actas = () => {
         {departamentos &&
           filteredDepartamentos().map((departamento, i) => (
             <Col sm="4" key={i}>
-              <Card>
+              <Card className="cursor-pointer">
                 <CardHeader>
-                  <CardTitle>Create Awesome</CardTitle>
+                  <Row>
+                    <CardTitle>Actas</CardTitle>
+                    <p>13.123</p>
+                  </Row>
+                  <Row className="text-end">
+                    <CardTitle>Región</CardTitle>
+                    <p>3</p>
+                  </Row>
                 </CardHeader>
-                <CardBody>
-                  <CardText>This is your second page.</CardText>
-                  <CardText>
-                    Chocolate sesame snaps pie carrot cake pastry pie lollipop
-                    muffin. Carrot cake dragée chupa chups jujubes
-                  </CardText>
+                <CardBody className="text-center">
+                  <CardText>{departamento.departamento.toUpperCase()}</CardText>
                 </CardBody>
+                <CardFooter className="text-muted">
+                  <Row className="mb-1">
+                    <Col>
+                      <span>Completadas {departamento.avance}%</span>
+                      <Progress
+                        color="info"
+                        style={{ height: "5px" }}
+                        value={departamento.avance}
+                      />
+                    </Col>
+                  </Row>
+                  <Row>
+                    <Col>
+                      <span style={{ fontSize: "12px" }}>
+                        Incompletas {departamento.avance}%
+                      </span>
+                      <Progress
+                        color="warning"
+                        style={{ height: "5px" }}
+                        value={departamento.avance}
+                      />
+                    </Col>
+                    <Col>
+                      <span style={{ fontSize: "12px" }}>
+                        Faltantes {departamento.avance}%
+                      </span>
+                      <Progress
+                        color="danger"
+                        style={{ height: "5px" }}
+                        value={departamento.avance}
+                      />
+                    </Col>
+                  </Row>
+                </CardFooter>
               </Card>
             </Col>
           ))}
