@@ -12,6 +12,7 @@ import {
   Input,
   Row,
   Button,
+  Spinner,
 } from "reactstrap";
 import { useHistory } from "react-router-dom";
 
@@ -27,13 +28,14 @@ const Home = () => {
   const [search, setSearch] = useState("");
   // EFFECT
   useEffect(() => {
-    (async () => {
-      const { data } = await axios.get("http://localhost:3004/departamentos");
-      setDepartamentos(data);
-    })();
+    setTimeout(() => {
+      (async () => {
+        const { data } = await axios.get("http://localhost:3004/departamentos");
+        setDepartamentos(data);
+      })();
+    }, 3000);
   }, []);
   // FUNCIONES
-
   const handleClick = () => {
     history.push(`/municipios?zona=xxx`);
   };
@@ -69,6 +71,15 @@ const Home = () => {
     setCurrentPage(0);
     setSearch(e.target.value);
   };
+  if (!departamentos) {
+    return (
+      <div className="d-flex justify-content-center align-content-center mt-4">
+        <Spinner color="primary" size="">
+          Loading...
+        </Spinner>
+      </div>
+    );
+  }
   // RENDER
   return (
     <>
@@ -76,7 +87,7 @@ const Home = () => {
         <CardHeader className="border-bottom">
           <CardTitle tag="h4">Server Side</CardTitle>
         </CardHeader>
-        <Row className="mx-0 mt-1 mb-50 justify-content-between">
+        <Row className="mb-1 justify-content-between gap-1 p-1">
           <Col xl="2" md="2" ms="2">
             <div>
               <Input type="select" name="select" id="select-basic">
@@ -86,7 +97,7 @@ const Home = () => {
             </div>
           </Col>
           <Col
-            className="d-flex align-items-center justify-content-sm-end mt-sm-0 mt-1"
+            className="d-flex align-items-center justify-content-sm-end mt-sm-0"
             sm="12"
             md="6"
           >

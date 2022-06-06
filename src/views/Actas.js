@@ -3,6 +3,8 @@
 
 import { useEffect, useState } from "react";
 import {
+  Badge,
+  Button,
   Card,
   CardBody,
   CardFooter,
@@ -31,6 +33,7 @@ const Actas = () => {
       setDepartamentos(data);
     })();
   }, []);
+  // FUNCIONES
   const filteredDepartamentos = () => {
     if (search.length === 0) {
       return departamentos.slice(currentPage, currentPage + 9);
@@ -54,6 +57,11 @@ const Actas = () => {
       setCurrentPage(currentPage + 9);
     }
   };
+  const prevPage = () => {
+    if (currentPage > 0) {
+      setCurrentPage(currentPage - 9);
+    }
+  };
   const onSearchChange = (e) => {
     setCurrentPage(0);
     setSearch(e.target.value);
@@ -62,7 +70,7 @@ const Actas = () => {
   return (
     <>
       <Row>
-        <Col>
+        <Col lg="6" md="6" ms="4">
           <Card>
             <CardHeader>
               <CardTitle className="text-center">Create Awesome</CardTitle>
@@ -73,10 +81,21 @@ const Actas = () => {
                 <Progress bar color="warning" value="20" />
                 <Progress bar color="danger" value="15" />
               </Progress>
+              <div className="d-flex justify-content-center mt-1 gap-1 flex-md-row flex-lg-row">
+                <Badge color="info" pill>
+                  Completadas
+                </Badge>
+                <Badge pill color="warning">
+                  Incompletas
+                </Badge>
+                <Badge color="danger" pill>
+                  Faltantes
+                </Badge>
+              </div>
             </CardBody>
           </Card>
         </Col>
-        <Col>
+        <Col lg="6" md="6" ms="4">
           <Card>
             <CardHeader>
               <CardTitle>Create Awesome</CardTitle>
@@ -87,6 +106,17 @@ const Actas = () => {
                 <Progress bar color="warning" value="20" />
                 <Progress bar color="danger" value="15" />
               </Progress>
+              <div className="d-flex justify-content-center mt-1 gap-1 flex-md-row flex-lg-row">
+                <Badge color="info" pill>
+                  Completadas
+                </Badge>
+                <Badge pill color="warning">
+                  Incompletas
+                </Badge>
+                <Badge color="danger" pill>
+                  Faltantes
+                </Badge>
+              </div>
             </CardBody>
           </Card>
         </Col>
@@ -174,6 +204,14 @@ const Actas = () => {
               </Card>
             </Col>
           ))}
+        <div>
+          <Button color="primary" className="m-1" onClick={prevPage}>
+            Anterior
+          </Button>
+          <Button color="primary" onClick={nextPage}>
+            Siguiente
+          </Button>
+        </div>
       </Row>
     </>
   );
