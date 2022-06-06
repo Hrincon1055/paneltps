@@ -1,7 +1,29 @@
 import { Card, CardHeader, CardBody, CardTitle, CardText } from 'reactstrap'
+import ReactPaginate from 'react-paginate';
 
 const SecondPage = () => {
   return (
+    <>
+        <ReactPaginate
+        previousLabel="Previous"
+        nextLabel="Next"
+        pageClassName="page-item"
+        pageLinkClassName="page-link"
+        previousClassName="page-item"
+        previousLinkClassName="page-link"
+        nextClassName="page-item"
+        nextLinkClassName="page-link"
+        breakLabel="..."
+        breakClassName="page-item"
+        breakLinkClassName="page-link"
+        pageCount={10}
+        marginPagesDisplayed={2}
+        pageRangeDisplayed={5}
+        containerClassName="pagination"
+        activeClassName="active"
+        />
+
+
     <Card>
       <CardHeader>
         <CardTitle>Create Awesome 🙌</CardTitle>
@@ -14,6 +36,11 @@ const SecondPage = () => {
         </CardText>
       </CardBody>
     </Card>
+
+    </>
+
+
+
   )
 }
 
