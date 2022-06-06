@@ -13,10 +13,62 @@ import {
   Row,
   Button,
   Spinner,
+  Modal,
+  ModalHeader,
+  ModalBody,
+  ModalFooter,
+  Tooltip,
 } from "reactstrap";
 import { useHistory } from "react-router-dom";
 
+import { Share } from 'react-feather'
+
 import axios from "axios";
+import { Bar } from "react-chartjs-2";
+
+const labels = ['enero', 'febrero'];
+const data = {
+  labels: labels,
+  datasets: [
+    {
+      label: 'Completos',
+      data: [65, 67, 68],
+      backgroundColor: [
+        'rgb(255, 99, 132)',
+        'rgb(255, 159, 64)'
+      ],
+      borderColor: [
+        'rgba(255, 99, 132, 0.2)',
+        'rgba(255, 159, 64, 0.2)'
+      ],
+      borderWidth: 1
+    },
+  ]
+};
+
+const config = {
+  type: 'bar',
+  data: data,
+  options: {
+    // indexAxis: 'y',
+    plugins: {
+      legend: {
+        display: false,
+        // position: 'bottom',
+        // labels: {
+        //     usePointStyle: true,
+        //     pointStyle:'circle'
+        // }
+      },
+      title: {
+        display: false,
+        text: 'Chart.js Bar Chart - Stacked'
+      },
+    },
+    maintainAspectRatio: false,
+    responsive: true,
+  }
+};
 
 // INICIO
 const Home = () => {
@@ -26,6 +78,9 @@ const Home = () => {
   const [departamentos, setDepartamentos] = useState(null);
   const [currentPage, setCurrentPage] = useState(0);
   const [search, setSearch] = useState("");
+  const [tooltipOpen, setTooltipOpen] = useState(false);
+  const [basicModal, setBasicModal] = useState(false)
+
   // EFFECT
   useEffect(() => {
     setTimeout(() => {
@@ -33,12 +88,20 @@ const Home = () => {
         const { data } = await axios.get("http://localhost:3004/departamentos");
         setDepartamentos(data);
       })();
-    }, 3000);
+    }, 500);
   }, []);
   // FUNCIONES
   const handleClick = () => {
     history.push(`/municipios?zona=xxx`);
   };
+
+  const handleOpenModal = () => {
+    // console.log("clickkk");
+
+    // alert("jdksajdkl")
+    setBasicModal(!basicModal)
+
+  }
   const filteredDepartamentos = () => {
     if (search.length === 0) {
       return departamentos.slice(currentPage, currentPage + 5);
@@ -83,9 +146,22 @@ const Home = () => {
   // RENDER
   return (
     <>
-      <Card className="mt-1">
+      <Card>
         <CardHeader className="border-bottom">
           <CardTitle tag="h4">Server Side</CardTitle>
+          <CardTitle tag="h4">
+            <div id="TooltipExample">
+              <Share className="icon-modal" size={30} onClick={handleOpenModal} />
+            </div>
+            <Tooltip
+              isOpen={tooltipOpen}
+              flip
+              target="TooltipExample"
+              toggle={() => { setTooltipOpen(!tooltipOpen) }}
+            >
+              {'Avance publicadas'}
+            </Tooltip>
+          </CardTitle>
         </CardHeader>
         <Row className="mb-1 justify-content-between gap-1 p-1">
           <Col xl="2" md="2" ms="2">
@@ -154,6 +230,26 @@ const Home = () => {
           Siguiente
         </Button>
       </div>
+
+
+
+
+          <Modal centered
+            isOpen={basicModal} toggle={() => setBasicModal(!basicModal)}>
+              <ModalHeader toggle={() => setBasicModal(!basicModal)}>Basic Modal</ModalHeader>
+              <ModalBody>
+                <Bar
+                  options={config}
+                  data={data}
+                />
+              </ModalBody>
+              <ModalFooter>
+                <Button color='primary' onClick={() => setBasicModal(!basicModal)}>
+                  Accept
+                </Button>
+              </ModalFooter>
+            </Modal>
+
     </>
   );
 };
