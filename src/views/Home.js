@@ -23,13 +23,32 @@ import { useHistory } from "react-router-dom";
 import { Share } from "react-feather";
 import axios from "axios";
 import { Bar } from "react-chartjs-2";
-const labels = ["enero", "febrero"];
+import ChartDataLabels from "chartjs-plugin-datalabels";
+
+import {
+  Chart as ChartJS,
+  CategoryScale,
+  LinearScale,
+  BarElement,
+  Title,
+  Legend,
+} from "chart.js";
+
+ChartJS.register(
+  ChartDataLabels,
+  CategoryScale,
+  LinearScale,
+  BarElement,
+  Title,
+  Legend
+);
+
+const labels = ["publicadas", "faltantes"];
 const data = {
   labels: labels,
   datasets: [
     {
-      label: "Completos",
-      data: [65, 67, 68],
+      data: [65, 67],
       backgroundColor: ["rgb(255, 99, 132)", "rgb(255, 159, 64)"],
       borderColor: ["rgba(255, 99, 132, 0.2)", "rgba(255, 159, 64, 0.2)"],
       borderWidth: 1,
@@ -37,21 +56,33 @@ const data = {
   ],
 };
 
-const config = {
-  type: "bar",
-  data: data,
-  options: {
-    plugins: {
-      legend: {
-        display: false,
-      },
+const options = {
+  responsive: true,
+  maintainAspectRatio: false,
+  scales: {
+    yAxes: {
       title: {
-        display: false,
-        text: "Chart.js Bar Chart - Stacked",
+        display: true,
+        text: "Avance General Publicadas",
       },
     },
-    maintainAspectRatio: false,
-    responsive: true,
+  },
+  plugins: {
+    datalabels: {
+      backgroundColor: function (context) {
+        return context.dataset.backgroundColor;
+      },
+      borderColor: "white",
+      borderRadius: 25,
+      borderWidth: 3,
+      color: "white",
+    },
+    legend: {
+      display: false,
+    },
+    title: {
+      display: false,
+    },
   },
 };
 
@@ -226,7 +257,9 @@ const Home = () => {
           Basic Modal
         </ModalHeader>
         <ModalBody>
-          <Bar options={config} data={data} />
+          <div style={{ height: "40vh", width: "100%", position: "relative" }}>
+            <Bar options={options} data={data} />
+          </div>
         </ModalBody>
         <ModalFooter>
           <Button color="primary" onClick={() => setBasicModal(!basicModal)}>
