@@ -1,12 +1,12 @@
 // ** Reducers Imports
-import navbar from './navbar'
-import layout from './layout'
-import auth from './authentication'
+import navbar from "./navbar";
+import layout from "./layout";
+import auth from "./authentication";
 
 const rootReducer = {
   auth,
   navbar,
-  layout
-}
+  layout,
+};
 
-export default rootReducer
+export default rootReducer;

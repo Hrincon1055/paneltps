@@ -1,13 +1,8 @@
-/* eslint-disable semi */
-/* eslint-disable comma-dangle */
 import { lazy } from "react";
-
 // ** Document title
 const TemplateTitle = "%s - Vuexy React Admin Template";
-
 // ** Default Route
 const DefaultRoute = "/home";
-
 // ** Merge Routes
 const Routes = [
   {
@@ -26,7 +21,6 @@ const Routes = [
     path: "/actas",
     component: lazy(() => import("../../views/Actas")),
   },
-
   {
     path: "/login",
     component: lazy(() => import("../../views/Login")),
