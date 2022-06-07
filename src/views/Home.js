@@ -20,54 +20,39 @@ import {
   Tooltip,
 } from "reactstrap";
 import { useHistory } from "react-router-dom";
-
-import { Share } from 'react-feather'
-
+import { Share } from "react-feather";
 import axios from "axios";
 import { Bar } from "react-chartjs-2";
-
-const labels = ['enero', 'febrero'];
+const labels = ["enero", "febrero"];
 const data = {
   labels: labels,
   datasets: [
     {
-      label: 'Completos',
+      label: "Completos",
       data: [65, 67, 68],
-      backgroundColor: [
-        'rgb(255, 99, 132)',
-        'rgb(255, 159, 64)'
-      ],
-      borderColor: [
-        'rgba(255, 99, 132, 0.2)',
-        'rgba(255, 159, 64, 0.2)'
-      ],
-      borderWidth: 1
+      backgroundColor: ["rgb(255, 99, 132)", "rgb(255, 159, 64)"],
+      borderColor: ["rgba(255, 99, 132, 0.2)", "rgba(255, 159, 64, 0.2)"],
+      borderWidth: 1,
     },
-  ]
+  ],
 };
 
 const config = {
-  type: 'bar',
+  type: "bar",
   data: data,
   options: {
-    // indexAxis: 'y',
     plugins: {
       legend: {
         display: false,
-        // position: 'bottom',
-        // labels: {
-        //     usePointStyle: true,
-        //     pointStyle:'circle'
-        // }
       },
       title: {
         display: false,
-        text: 'Chart.js Bar Chart - Stacked'
+        text: "Chart.js Bar Chart - Stacked",
       },
     },
     maintainAspectRatio: false,
     responsive: true,
-  }
+  },
 };
 
 // INICIO
@@ -79,7 +64,7 @@ const Home = () => {
   const [currentPage, setCurrentPage] = useState(0);
   const [search, setSearch] = useState("");
   const [tooltipOpen, setTooltipOpen] = useState(false);
-  const [basicModal, setBasicModal] = useState(false)
+  const [basicModal, setBasicModal] = useState(false);
 
   // EFFECT
   useEffect(() => {
@@ -94,14 +79,9 @@ const Home = () => {
   const handleClick = () => {
     history.push(`/municipios?zona=xxx`);
   };
-
   const handleOpenModal = () => {
-    // console.log("clickkk");
-
-    // alert("jdksajdkl")
-    setBasicModal(!basicModal)
-
-  }
+    setBasicModal(!basicModal);
+  };
   const filteredDepartamentos = () => {
     if (search.length === 0) {
       return departamentos.slice(currentPage, currentPage + 5);
@@ -151,15 +131,21 @@ const Home = () => {
           <CardTitle tag="h4">Server Side</CardTitle>
           <CardTitle tag="h4">
             <div id="TooltipExample">
-              <Share className="icon-modal" size={30} onClick={handleOpenModal} />
+              <Share
+                className="icon-modal"
+                size={30}
+                onClick={handleOpenModal}
+              />
             </div>
             <Tooltip
               isOpen={tooltipOpen}
               flip
               target="TooltipExample"
-              toggle={() => { setTooltipOpen(!tooltipOpen) }}
+              toggle={() => {
+                setTooltipOpen(!tooltipOpen);
+              }}
             >
-              {'Avance publicadas'}
+              {"Avance publicadas"}
             </Tooltip>
           </CardTitle>
         </CardHeader>
@@ -231,25 +217,23 @@ const Home = () => {
         </Button>
       </div>
 
-
-
-
-          <Modal centered
-            isOpen={basicModal} toggle={() => setBasicModal(!basicModal)}>
-              <ModalHeader toggle={() => setBasicModal(!basicModal)}>Basic Modal</ModalHeader>
-              <ModalBody>
-                <Bar
-                  options={config}
-                  data={data}
-                />
-              </ModalBody>
-              <ModalFooter>
-                <Button color='primary' onClick={() => setBasicModal(!basicModal)}>
-                  Accept
-                </Button>
-              </ModalFooter>
-            </Modal>
-
+      <Modal
+        centered
+        isOpen={basicModal}
+        toggle={() => setBasicModal(!basicModal)}
+      >
+        <ModalHeader toggle={() => setBasicModal(!basicModal)}>
+          Basic Modal
+        </ModalHeader>
+        <ModalBody>
+          <Bar options={config} data={data} />
+        </ModalBody>
+        <ModalFooter>
+          <Button color="primary" onClick={() => setBasicModal(!basicModal)}>
+            Accept
+          </Button>
+        </ModalFooter>
+      </Modal>
     </>
   );
 };
