@@ -1,10 +1,10 @@
-import { Card, CardHeader, CardBody, CardTitle, CardText } from 'reactstrap'
-import ReactPaginate from 'react-paginate';
+import { Card, CardHeader, CardBody, CardTitle, CardText } from "reactstrap";
+import ReactPaginate from "react-paginate";
 
 const SecondPage = () => {
   return (
     <>
-        <ReactPaginate
+      <ReactPaginate
         previousLabel="Previous"
         nextLabel="Next"
         pageClassName="page-item"
@@ -21,27 +21,36 @@ const SecondPage = () => {
         pageRangeDisplayed={5}
         containerClassName="pagination"
         activeClassName="active"
-        />
+      />
 
+      <Card>
+        <CardHeader>
+          <CardTitle>Create Awesome 🙌</CardTitle>
+        </CardHeader>
+        <CardBody>
+          <CardText>This is your second page prueba</CardText>
+          <CardText>
+            Chocolate sesame snaps pie carrot cake pastry pie lollipop muffin.
+            Carrot cake dragée chupa chups jujubes. Macaroon liquorice cookie
+            wafer tart marzipan bonbon. Gingerbread jelly-o dragée chocolate.
+          </CardText>
+        </CardBody>
+      </Card>
 
-    <Card>
-      <CardHeader>
-        <CardTitle>Create Awesome 🙌</CardTitle>
-      </CardHeader>
-      <CardBody>
-        <CardText>This is your second page prueba</CardText>
-        <CardText>
-          Chocolate sesame snaps pie carrot cake pastry pie lollipop muffin. Carrot cake dragée chupa chups jujubes.
-          Macaroon liquorice cookie wafer tart marzipan bonbon. Gingerbread jelly-o dragée chocolate.
-        </CardText>
-      </CardBody>
-    </Card>
-
+      <Card>
+        <CardHeader>
+          <CardTitle>djaskljdklasjdkls</CardTitle>
+        </CardHeader>
+        <CardBody>
+          <CardText>
+            Chocolate sesame snaps pie carrot cake pastry pie lollipop muffin.
+            Carrot cake dragée chupa chups jujubes. Macaroon liquorice cookie
+            wafer tart marzipan bonbon. Gingerbread jelly-o dragée chocolate.
+          </CardText>
+        </CardBody>
+      </Card>
     </>
+  );
+};
 
-
-
-  )
-}
-
-export default SecondPage
+export default SecondPage;
