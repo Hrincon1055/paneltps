@@ -1,6 +1,8 @@
 import { Card, CardHeader, CardBody, CardTitle, CardText } from "reactstrap";
 import ReactPaginate from "react-paginate";
 
+import ChartDataLabels from "chartjs-plugin-datalabels";
+
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -13,6 +15,7 @@ import {
 import { Bar } from "react-chartjs-2";
 
 ChartJS.register(
+  ChartDataLabels,
   CategoryScale,
   LinearScale,
   BarElement,
@@ -27,7 +30,7 @@ const SecondPage = () => {
     labels: labels,
     datasets: [
       {
-        data: [65, 67, 68],
+        data: [65, 67],
         backgroundColor: ["rgb(255, 99, 132)", "rgb(255, 159, 64)"],
         borderColor: ["rgba(255, 99, 132, 0.2)", "rgba(255, 159, 64, 0.2)"],
         borderWidth: 1,
@@ -38,12 +41,23 @@ const SecondPage = () => {
   const options = {
     responsive: true,
     maintainAspectRatio: false,
-    cutoutPercentage: 80,
+    scales: {
+      yAxes: {
+        title: {
+          display: true,
+          text: "Avance General Publicadas",
+        },
+      },
+    },
     plugins: {
-      labels: {
-        render: "percentage",
-        fontColor: ["green", "white", "red"],
-        precision: 2,
+      datalabels: {
+        backgroundColor: function (context) {
+          return context.dataset.backgroundColor;
+        },
+        borderColor: "white",
+        borderRadius: 25,
+        borderWidth: 3,
+        color: "white",
       },
       legend: {
         display: false,
