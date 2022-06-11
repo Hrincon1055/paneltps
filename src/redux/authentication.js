@@ -1,43 +1,44 @@
-// ** Redux Imports
-import { createSlice } from '@reduxjs/toolkit'
+import { createSlice } from "@reduxjs/toolkit";
+// MIS COMPONENTES
+import { accessTokenApi } from "../api/auth";
+import { ACCESS_TOKEN } from "../utils/constants";
 
-// ** UseJWT import to get config
-import useJwt from '@src/auth/jwt/useJwt'
-
-const config = useJwt.jwtConfig
-
-const initialUser = () => {
-  const item = window.localStorage.getItem('userData')
-  //** Parse stored json or if none return initialValue
-  return item ? JSON.parse(item) : {}
-}
-
+// INICIO
 export const authSlice = createSlice({
-  name: 'authentication',
+  name: "authentication",
   initialState: {
-    userData: initialUser()
+    userToken: accessTokenApi(),
   },
   reducers: {
     handleLogin: (state, action) => {
-      state.userData = action.payload
-      state[config.storageTokenKeyName] = action.payload[config.storageTokenKeyName]
-      state[config.storageRefreshTokenKeyName] = action.payload[config.storageRefreshTokenKeyName]
-      localStorage.setItem('userData', JSON.stringify(action.payload))
-      localStorage.setItem(config.storageTokenKeyName, JSON.stringify(action.payload.accessToken))
-      localStorage.setItem(config.storageRefreshTokenKeyName, JSON.stringify(action.payload.refreshToken))
+      state.userToken = action.payload;
+      sessionStorage.setItem(ACCESS_TOKEN, JSON.stringify(action.payload));
+      console.log("authentication LINE 23 =>", state.userToken);
+      // state[config.storageTokenKeyName] =
+      //   action.payload[config.storageTokenKeyName];
+      // state[config.storageRefreshTokenKeyName] =
+      //   action.payload[config.storageRefreshTokenKeyName];
+      // localStorage.setItem("userData", JSON.stringify(action.payload));
+      // localStorage.setItem(
+      //   config.storageTokenKeyName,
+      //   JSON.stringify(action.payload.accessToken)
+      // );
+      // localStorage.setItem(
+      //   config.storageRefreshTokenKeyName,
+      //   JSON.stringify(action.payload.refreshToken)
+      // );
     },
-    handleLogout: state => {
-      state.userData = {}
-      state[config.storageTokenKeyName] = null
-      state[config.storageRefreshTokenKeyName] = null
-      // ** Remove user, accessToken & refreshToken from localStorage
-      localStorage.removeItem('userData')
-      localStorage.removeItem(config.storageTokenKeyName)
-      localStorage.removeItem(config.storageRefreshTokenKeyName)
-    }
-  }
-})
+    handleLogout: (state) => {
+      // state.userData = {};
+      // state[config.storageTokenKeyName] = null;
+      // state[config.storageRefreshTokenKeyName] = null;
+      // Remove user, accessToken & refreshToken from localStorage
+      // localStorage.removeItem("userData");
+      // localStorage.removeItem(config.storageTokenKeyName);
+      // localStorage.removeItem(config.storageRefreshTokenKeyName);
+    },
+  },
+});
+export const { handleLogin, handleLogout } = authSlice.actions;
 
-export const { handleLogin, handleLogout } = authSlice.actions
-
-export default authSlice.reducer
+export default authSlice.reducer;

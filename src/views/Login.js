@@ -16,12 +16,21 @@ import {
 } from "reactstrap";
 import "@styles/react/pages/page-authentication.scss";
 
+import { useAuthentication } from "@hooks/useAuthentication";
+import { useSelector } from "react-redux";
+// INICIO
 const LoginCover = () => {
+  // HOOKS
   const { skin } = useSkin();
-
+  const { setHandleLogin, setHandleLogout } = useAuthentication();
+  const store = useSelector((state) => state.auth);
+  // FUNCIONES
   const illustration = skin === "dark" ? "login_dark.svg" : "login_light.svg",
     source = require(`@src/assets/images/pages/${illustration}`).default;
-
+  const login = () => {
+    setHandleLogin();
+  };
+  // RENDER
   return (
     <div className="auth-wrapper auth-cover">
       <Row className="auth-inner m-0">
@@ -146,7 +155,7 @@ const LoginCover = () => {
                   Remember Me
                 </Label>
               </div>
-              <Button color="primary" tag={Link} block to="/">
+              <Button color="primary" onClick={login} block>
                 Sign in
               </Button>
             </Form>
