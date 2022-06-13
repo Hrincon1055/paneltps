@@ -20,6 +20,8 @@ import "prismjs/components/prism-jsx.min";
 import "react-perfect-scrollbar/dist/css/styles.css";
 // ** React Toastify
 import "@styles/react/libs/toastify/toastify.scss";
+// import "react-toastify/dist/ReactToastify.css";
+
 // ** Core styles
 import "./@core/assets/fonts/feather/iconfont.css";
 import "./@core/scss/core.scss";

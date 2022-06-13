@@ -21,10 +21,8 @@ import {
 } from "reactstrap";
 import { useHistory } from "react-router-dom";
 import { Share } from "react-feather";
-import axios from "axios";
 import { Bar } from "react-chartjs-2";
 import ChartDataLabels from "chartjs-plugin-datalabels";
-
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -33,6 +31,10 @@ import {
   Title,
   Legend,
 } from "chart.js";
+import { toast } from "react-toastify";
+// MIS COMPONENTES
+import { axiosApi } from "../libs/axiosApi";
+import { PATHS_API } from "../utils/constants";
 
 ChartJS.register(
   ChartDataLabels,
@@ -92,6 +94,7 @@ const Home = () => {
   const history = useHistory();
   // STATE
   const [departamentos, setDepartamentos] = useState(null);
+  const [totales, setTotales] = useState(null);
   const [currentPage, setCurrentPage] = useState(0);
   const [search, setSearch] = useState("");
   const [tooltipOpen, setTooltipOpen] = useState(false);
@@ -99,12 +102,20 @@ const Home = () => {
 
   // EFFECT
   useEffect(() => {
-    setTimeout(() => {
-      (async () => {
-        const { data } = await axios.get("http://localhost:3004/departamentos");
-        setDepartamentos(data);
-      })();
-    }, 500);
+    axiosApi
+      .get(PATHS_API.departamentos)
+      .then((response) => {
+        if (response.status == 200) {
+          setTotales(response.data);
+          setDepartamentos(response.data.departamentos);
+        } else {
+          console.log("Home LINE 112 =>", "Error difernte de 200");
+        }
+      })
+      .catch((err) => {
+        toast.error("Ha ocurrido un error");
+        console.log("Home LINE 115 =>", err);
+      });
   }, []);
   // FUNCIONES
   const handleClick = () => {
@@ -113,34 +124,35 @@ const Home = () => {
   const handleOpenModal = () => {
     setBasicModal(!basicModal);
   };
+
   const filteredDepartamentos = () => {
     if (search.length === 0) {
-      return departamentos.slice(currentPage, currentPage + 5);
+      return departamentos.slice(currentPage, currentPage + 50);
     }
     const filterd = departamentos.filter((departamento) => {
-      return departamento.departamento
+      return departamento.descripcion
         .toLowerCase()
         .includes(search.toLowerCase());
     });
-    return filterd.slice(currentPage, currentPage + 5);
+    return filterd.slice(currentPage, currentPage + 50);
   };
-  const nextPage = () => {
-    if (
-      departamentos.filter((departamento) =>
-        departamento.departamento
-          .toLowerCase()
-          .includes(search.toLocaleLowerCase())
-      ).length >
-      currentPage + 5
-    ) {
-      setCurrentPage(currentPage + 5);
-    }
-  };
-  const prevPage = () => {
-    if (currentPage > 0) {
-      setCurrentPage(currentPage - 5);
-    }
-  };
+  // const nextPage = () => {
+  //   if (
+  //     departamentos.filter((departamento) =>
+  //       departamento.departamento
+  //         .toLowerCase()
+  //         .includes(search.toLocaleLowerCase())
+  //     ).length >
+  //     currentPage + 5
+  //   ) {
+  //     setCurrentPage(currentPage + 5);
+  //   }
+  // };
+  // const prevPage = () => {
+  //   if (currentPage > 0) {
+  //     setCurrentPage(currentPage - 5);
+  //   }
+  // };
   const onSearchChange = (e) => {
     setCurrentPage(0);
     setSearch(e.target.value);
@@ -224,29 +236,38 @@ const Home = () => {
             {departamentos &&
               filteredDepartamentos().map((departamento, index) => (
                 <tr onClick={handleClick} key={index}>
-                  <td>{departamento.departamento.toUpperCase()}</td>
+                  <td>{departamento.descripcion.toUpperCase()}</td>
                   <td>{departamento.esperados}</td>
                   <td>{departamento.publicados}</td>
                   <td>
                     <span>{departamento.avance}%</span>
                     <Progress value={departamento.avance} />
                   </td>
-                  <td>{departamento.sin_publicar}</td>
-                  <td>{departamento.e11_cerificados}</td>
+                  <td>{departamento.sinPublicar}</td>
+                  <td>{departamento.e11Certificados}</td>
                   <td>{departamento.faltantes}</td>
                 </tr>
               ))}
+            <tr>
+              <td>TOTALES</td>
+              <td>{totales.sumEsperados}</td>
+              <td>{totales.sumPublicados}</td>
+              <td>{totales.promAvance}</td>
+              <td>{totales.sumSinPublicar}</td>
+              <td>{totales.sumE11Certificados}</td>
+              <td>{totales.sumfaltantes}</td>
+            </tr>
           </tbody>
         </Table>
       </Card>
-      <div>
+      {/* <div>
         <Button color="primary" className="m-1" onClick={prevPage}>
           Anterior
         </Button>
         <Button color="primary" onClick={nextPage}>
           Siguiente
         </Button>
-      </div>
+      </div> */}
 
       <Modal
         centered

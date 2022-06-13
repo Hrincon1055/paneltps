@@ -1,112 +1,36 @@
 {
-  "departamentos": [
+  "deptos": [
     {
-      "departamento": "antioquia",
-      "esperados": 146,
-      "publicados": 1,
-      "avance": 0.68,
-      "sin_publicar": 145,
-      "e11_cerificados": 0,
-      "faltantes": 145
+      "sumaEsperados": 10,
+      "sumaAvance": 10,
+      "sumaSinPublicar": 10
     },
     {
-      "departamento": "amazonas",
-      "esperados": 345,
-      "publicados": 2005,
-      "avance": 15.13,
-      "sin_publicar": 11240,
-      "e11_cerificados": 0,
-      "faltantes": 240
-    },
-    {
-      "departamento": "amazonas",
-      "esperados": 345,
-      "publicados": 2005,
-      "avance": 15.13,
-      "sin_publicar": 11240,
-      "e11_cerificados": 0,
-      "faltantes": 240
-    },
-    {
-      "departamento": "amazonas",
-      "esperados": 345,
-      "publicados": 2005,
-      "avance": 15.13,
-      "sin_publicar": 11240,
-      "e11_cerificados": 0,
-      "faltantes": 240
-    },
-    {
-      "departamento": "amazonas",
-      "esperados": 345,
-      "publicados": 2005,
-      "avance": 15.13,
-      "sin_publicar": 11240,
-      "e11_cerificados": 0,
-      "faltantes": 240
-    },
-    {
-      "departamento": "amazonas",
-      "esperados": 345,
-      "publicados": 2005,
-      "avance": 15.13,
-      "sin_publicar": 11240,
-      "e11_cerificados": 0,
-      "faltantes": 240
-    },
-    {
-      "departamento": "amazonas",
-      "esperados": 345,
-      "publicados": 2005,
-      "avance": 15.13,
-      "sin_publicar": 11240,
-      "e11_cerificados": 0,
-      "faltantes": 240
-    },
-    {
-      "departamento": "amazonas",
-      "esperados": 345,
-      "publicados": 2005,
-      "avance": 15.13,
-      "sin_publicar": 11240,
-      "e11_cerificados": 0,
-      "faltantes": 240
-    },
-    {
-      "departamento": "amazonas",
-      "esperados": 345,
-      "publicados": 2005,
-      "avance": 15.13,
-      "sin_publicar": 11240,
-      "e11_cerificados": 0,
-      "faltantes": 240
-    },
-    {
-      "departamento": "amazonas",
-      "esperados": 345,
-      "publicados": 2005,
-      "avance": 15.13,
-      "sin_publicar": 11240,
-      "e11_cerificados": 0,
-      "faltantes": 240
-    },
-    {
-      "departamento": "amazonas",
-      "esperados": 345,
-      "publicados": 2005,
-      "avance": 15.13,
-      "sin_publicar": 11240,
-      "e11_cerificados": 0,
-      "faltantes": 240
-    },
-    {
-      "departamento": "amazonas",
-      "esperados": 345,
-      "publicados": 2005,
-      "avance": 15.13,
-      "sin_publicar": 11240,
-      "e11_cerificados": 0,
-      "faltantes": 240
+      "sumas": {
+        "sumaEsperados": 10,
+        "sumaAvance": 10,
+        "sumaSinPublicar": 10
+      },
+      "data": [
+        {
+          "departamento": "amazonas",
+          "esperados": 345,
+          "publicados": 2005,
+          "avance": 15.13,
+          "sin_publicar": 11240,
+          "e11_cerificados": 0,
+          "faltantes": 240
+        },
+        {
+          "departamento": "antioquia",
+          "esperados": 146,
+          "publicados": 1,
+          "avance": 0.68,
+          "sin_publicar": 145,
+          "e11_cerificados": 0,
+          "faltantes": 145
+        }
+      ]
     }
   ]
 }
