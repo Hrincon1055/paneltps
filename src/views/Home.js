@@ -202,12 +202,12 @@ const Home = () => {
         </CardHeader>
         <Row className="mb-1 justify-content-between gap-1 p-1">
           <Col xl="2" md="2" ms="2">
-            <div>
+            {/* <div>
               <Input type="select" name="select" id="select-basic">
                 <option>E 11</option>
                 <option>E 14</option>
               </Input>
-            </div>
+            </div> */}
           </Col>
           <Col
             className="d-flex align-items-center justify-content-sm-end mt-sm-0"
