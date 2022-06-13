@@ -99,22 +99,30 @@ const Home = () => {
   const [search, setSearch] = useState("");
   const [tooltipOpen, setTooltipOpen] = useState(false);
   const [basicModal, setBasicModal] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   // EFFECT
   useEffect(() => {
+    setIsLoading(true);
     axiosApi
       .get(PATHS_API.departamentos)
       .then((response) => {
         if (response.status == 200) {
           setTotales(response.data);
           setDepartamentos(response.data.departamentos);
+          setIsLoading(false);
         } else {
-          console.log("Home LINE 112 =>", "Error difernte de 200");
+          toast.warn("Ha ocurrido un error");
+          setTotales(null);
+          setDepartamentos(null);
+          setIsLoading(false);
         }
       })
       .catch((err) => {
         toast.error("Ha ocurrido un error");
-        console.log("Home LINE 115 =>", err);
+        setTotales(null);
+        setDepartamentos(null);
+        setIsLoading(false);
       });
   }, []);
   // FUNCIONES
@@ -157,7 +165,7 @@ const Home = () => {
     setCurrentPage(0);
     setSearch(e.target.value);
   };
-  if (!departamentos) {
+  if (isLoading) {
     return (
       <div className="d-flex justify-content-center align-content-center mt-4">
         <Spinner color="primary" size="">
@@ -248,15 +256,17 @@ const Home = () => {
                   <td>{departamento.faltantes}</td>
                 </tr>
               ))}
-            <tr>
-              <td>TOTALES</td>
-              <td>{totales.sumEsperados}</td>
-              <td>{totales.sumPublicados}</td>
-              <td>{totales.promAvance}</td>
-              <td>{totales.sumSinPublicar}</td>
-              <td>{totales.sumE11Certificados}</td>
-              <td>{totales.sumfaltantes}</td>
-            </tr>
+            {totales && (
+              <tr>
+                <td>TOTALES</td>
+                <td>{totales.sumEsperados}</td>
+                <td>{totales.sumPublicados}</td>
+                <td>{totales.promAvance}</td>
+                <td>{totales.sumSinPublicar}</td>
+                <td>{totales.sumE11Certificados}</td>
+                <td>{totales.sumfaltantes}</td>
+              </tr>
+            )}
           </tbody>
         </Table>
       </Card>
