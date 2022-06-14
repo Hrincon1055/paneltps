@@ -15,38 +15,13 @@ import {
   Label,
   Input,
   Row,
-  Button,
-  Spinner,
-  Modal,
-  ModalHeader,
-  ModalBody,
-  ModalFooter,
   Tooltip,
 } from "reactstrap";
 import { Share } from "react-feather";
-import { Bar } from "react-chartjs-2";
-import ChartDataLabels from "chartjs-plugin-datalabels";
-import {
-  Chart as ChartJS,
-  CategoryScale,
-  LinearScale,
-  BarElement,
-  Title,
-  Legend,
-} from "chart.js";
 import { toast } from "react-toastify";
 // MIS COMPONENTES
 import { axiosApi } from "../libs/axiosApi";
 import { PATHS_API } from "../utils/constants";
-
-ChartJS.register(
-  ChartDataLabels,
-  CategoryScale,
-  LinearScale,
-  BarElement,
-  Title,
-  Legend
-);
 
 // INICIO
 const Ciudades = () => {
@@ -64,18 +39,56 @@ const Ciudades = () => {
   const [isLoading, setIsLoading] = useState(false);
 
   // CONSTANTES
-  const parsed = queryString.parse(location.search);
+  const { depto } = queryString.parse(location.search);
 
   // EFFECTS
   useEffect(() => {
-    console.log(`${PATHS_API.ciudad}?depto=${parsed.depto}`);
+    console.log(`${PATHS_API.ciudad}?depto=${depto}`);
     axiosApi
-      .get(`${PATHS_API.ciudad}?depto=${parsed.depto}`)
+      .get(`${PATHS_API.ciudad}?depto=${depto}`)
       .then((response) => {
-        console.log(response);
+        // setTotales(response);
+
+        if (response.status == 200) {
+          console.log(response);
+          setCiudades(response.data);
+          // setTotales(response.data);
+          // setDepartamentos(response.data.departamentos);
+          // setIsLoading(false);
+        } else {
+          // toast.warn("Ha ocurrido un error");
+          // setTotales(null);
+          // setDepartamentos(null);
+          // setIsLoading(false);
+          throw "Ha ocurrido un error";
+        }
+
+        // console.log(response);
+        // console.log(response);
       })
       .catch((err) => {});
-  }, []);
+  }, [depto]);
+
+  const filteredCiudades = () => {
+    const data = ciudades;
+    if (data) {
+      if (search.length === 0) {
+        return data.departamentos.slice(currentPage, currentPage + 50);
+      }
+
+      const filterd = data.departamentos.filter((ciudad) =>
+        ciudad.descripcion.toLowerCase().includes(search.toLowerCase())
+      );
+
+      return filterd;
+    }
+  };
+
+  const onSearchChange = (e) => {
+    setCurrentPage(0);
+    setSearch(e.target.value);
+  };
+
   // RENDER
   return (
     <>
@@ -107,6 +120,8 @@ const Ciudades = () => {
               bsSize="md"
               name="search"
               id="search"
+              value={search}
+              onChange={(e) => onSearchChange(e)}
             />
           </Col>
         </Row>
@@ -124,16 +139,39 @@ const Ciudades = () => {
             </tr>
           </thead>
           <tbody>
-            <tr className="table-primary">
-              <td>TOTALES</td>
-              <td>{"total"}</td>
-              <td>{"total"}</td>
-              <td>{"total"}</td>
-              <td>{"total"}</td>
-              <td>{"total"}</td>
-              <td>{"total"}</td>
-              <td>{"total"}</td>
-            </tr>
+            {ciudades &&
+              filteredCiudades().map((ciudad, index) => (
+                <tr key={index}>
+                  <td>{"co"}</td>
+                  <td>{ciudad.descripcion.toUpperCase()}</td>
+                  <td>{ciudad.esperados}</td>
+                  <td>{ciudad.publicados}</td>
+                  <td>
+                    <span>{ciudad.avance}%</span>
+                    <Progress value={ciudad.avance} />
+                  </td>
+                  <td>{ciudad.sinPublicar}</td>
+                  <td>{ciudad.e11Certificados}</td>
+                  <td>{ciudad.faltantes}</td>
+                </tr>
+              ))}
+
+            {ciudades && (
+              <tr className="table-primary">
+                <td></td>
+                <td>TOTALES</td>
+                <td>{ciudades.sumEsperados}</td>
+                <td>{ciudades.sumPublicados}</td>
+                <td>{ciudades.promAvance}</td>
+                {/* <td>
+                  <span>{ciudades.promAvance}%</span>
+                  <Progress value={ciudades.promAvance} />
+                </td> */}
+                <td>{ciudades.sumSinPublicar}</td>
+                <td>{ciudades.sumE11Certificados}</td>
+                <td>{ciudades.sumfaltantes}</td>
+              </tr>
+            )}
           </tbody>
         </Table>
       </Card>
