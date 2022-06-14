@@ -108,7 +108,6 @@ const Home = () => {
       .get(PATHS_API.departamentos)
       .then((response) => {
         if (response.status == 200) {
-          console.log("Home LINE 111 =>");
           setTotales(response.data);
           setDepartamentos(response.data.departamentos);
           setIsLoading(false);

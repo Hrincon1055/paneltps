@@ -13,6 +13,7 @@ import {
   Label,
   Input,
   Button,
+  FormFeedback,
 } from "reactstrap";
 import "@styles/react/pages/page-authentication.scss";
 
@@ -130,10 +131,11 @@ const LoginCover = () => {
                 </Label>
                 <Input
                   type="email"
-                  id="login-email"
+                  id="login-email error"
                   placeholder="john@example.com"
                   autoFocus
                 />
+                <FormFeedback>Oh noes! that name is already taken</FormFeedback>
               </div>
               <div className="mb-1">
                 <div className="d-flex justify-content-between">
@@ -145,7 +147,7 @@ const LoginCover = () => {
                   </Link>
                 </div>
                 <InputPasswordToggle
-                  className="input-group-merge"
+                  className="input-group-merge "
                   id="login-password"
                 />
               </div>

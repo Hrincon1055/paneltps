@@ -1,6 +1,3 @@
-/* eslint-disable comma-dangle */
-/* eslint-disable semi */
-
 import { useEffect, useState } from "react";
 import {
   Badge,
@@ -16,57 +13,78 @@ import {
   Label,
   Progress,
   Row,
+  Spinner,
 } from "reactstrap";
+import { useHistory } from "react-router-dom";
+import { toast } from "react-toastify";
+import { RefreshCcw } from "react-feather";
+// MIS COMPONENTES
+import { axiosApi } from "../libs/axiosApi";
+import { PATHS_API } from "../utils/constants";
 
-import axios from "axios";
-// const carsInfo = Array(50);
 // INICIO
-const Actas = () => {
+const DepartamentosCard = () => {
+  // HOOKS
+  const history = useHistory();
   // STATE
   const [departamentos, setDepartamentos] = useState(null);
-  const [currentPage, setCurrentPage] = useState(0);
+  const [isLoading, setIsLoading] = useState(false);
+  const [totales, setTotales] = useState(null);
+
+  // const [currentPage, setCurrentPage] = useState(0);
   const [search, setSearch] = useState("");
+
   // EFFECT
   useEffect(() => {
-    (async () => {
-      const { data } = await axios.get("http://localhost:3004/departamentos");
-      setDepartamentos(data);
-    })();
+    setIsLoading(true);
+    axiosApi
+      .get(PATHS_API.departamentos)
+      .then((response) => {
+        if (response.status == 200) {
+          setTotales(response.data);
+          setDepartamentos(response.data.departamentos);
+          setIsLoading(false);
+        } else {
+          throw "Ha ocurrido un error";
+        }
+      })
+      .catch((err) => {
+        toast.error("Ha ocurrido un error", err);
+        setTotales(null);
+        setDepartamentos([]);
+        setIsLoading(false);
+      });
   }, []);
   // FUNCIONES
   const filteredDepartamentos = () => {
-    if (search.length === 0) {
-      return departamentos.slice(currentPage, currentPage + 9);
-    }
     const filterd = departamentos.filter((departamento) => {
-      return departamento.departamento
+      return departamento.descripcion
         .toLowerCase()
         .includes(search.toLowerCase());
     });
-    return filterd.slice(currentPage, currentPage + 9);
+    return filterd;
   };
-  const nextPage = () => {
-    if (
-      departamentos.filter((departamento) =>
-        departamento.departamento
-          .toLowerCase()
-          .includes(search.toLocaleLowerCase())
-      ).length >
-      currentPage + 9
-    ) {
-      setCurrentPage(currentPage + 9);
-    }
-  };
-  const prevPage = () => {
-    if (currentPage > 0) {
-      setCurrentPage(currentPage - 9);
-    }
+
+  const handleClick = (idDepartamento) => {
+    console.log("DepartamentosCard LINE 66 =>", idDepartamento);
+    history.push(`/ciudades-card?depto=${idDepartamento}`);
   };
   const onSearchChange = (e) => {
-    setCurrentPage(0);
+    // setCurrentPage(0);
     setSearch(e.target.value);
   };
+
   // RENDER
+
+  if (isLoading) {
+    return (
+      <div className="d-flex justify-content-center align-content-center mt-4">
+        <Spinner color="primary" size="">
+          Loading...
+        </Spinner>
+      </div>
+    );
+  }
   return (
     <>
       <Row>
@@ -122,14 +140,6 @@ const Actas = () => {
         </Col>
       </Row>
       <Row className="mb-1 justify-content-between gap-1">
-        <Col xl="2" md="2" ms="2">
-          <div>
-            <Input type="select" name="select" id="select-basic">
-              <option>E 11</option>
-              <option>E 14</option>
-            </Input>
-          </div>
-        </Col>
         <Col
           className="d-flex align-items-center justify-content-sm-end mt-sm-0"
           sm="12"
@@ -148,55 +158,65 @@ const Actas = () => {
             onChange={(e) => onSearchChange(e)}
           />
         </Col>
+        <Col xl="2" md="2" ms="12">
+          <div>
+            <Button block color="primary">
+              <RefreshCcw />
+            </Button>
+          </div>
+        </Col>
       </Row>
       <Row>
         {departamentos &&
-          filteredDepartamentos().map((departamento, i) => (
-            <Col sm="4" key={i}>
-              <Card className="cursor-pointer">
+          filteredDepartamentos().map((departamento) => (
+            <Col sm="4" key={departamento.codepar}>
+              <Card
+                className="cursor-pointer"
+                onClick={() => handleClick(departamento.codepar)}
+              >
                 <CardHeader>
                   <Row>
-                    <CardTitle>Actas</CardTitle>
-                    <p>13.123</p>
+                    <CardTitle>Esperadas</CardTitle>
+                    <p>{departamento.esperados}</p>
                   </Row>
                   <Row className="text-end">
-                    <CardTitle>Región</CardTitle>
-                    <p>3</p>
+                    <CardTitle>#</CardTitle>
+                    <p>{departamento.codepar}</p>
                   </Row>
                 </CardHeader>
                 <CardBody className="text-center">
-                  <CardText>{departamento.departamento.toUpperCase()}</CardText>
+                  <CardText>{departamento.descripcion.toUpperCase()}</CardText>
                 </CardBody>
                 <CardFooter className="text-muted">
                   <Row className="mb-1">
                     <Col>
-                      <span>Completadas {departamento.avance}%</span>
+                      <span>Publicados {departamento.publicados}%</span>
                       <Progress
                         color="info"
-                        style={{ height: "5px" }}
-                        value={departamento.avance}
+                        style={{ height: "8px" }}
+                        value={departamento.publicados}
                       />
                     </Col>
                   </Row>
                   <Row>
                     <Col>
                       <span style={{ fontSize: "12px" }}>
-                        Incompletas {departamento.avance}%
+                        Sin Publicar {departamento.sinPublicar}%
                       </span>
                       <Progress
                         color="warning"
-                        style={{ height: "5px" }}
-                        value={departamento.avance}
+                        style={{ height: "8px" }}
+                        value={departamento.sinPublicar}
                       />
                     </Col>
                     <Col>
                       <span style={{ fontSize: "12px" }}>
-                        Faltantes {departamento.avance}%
+                        Faltantes {departamento.faltantes}%
                       </span>
                       <Progress
                         color="danger"
-                        style={{ height: "5px" }}
-                        value={departamento.avance}
+                        style={{ height: "8px" }}
+                        value={departamento.faltantes}
                       />
                     </Col>
                   </Row>
@@ -204,17 +224,17 @@ const Actas = () => {
               </Card>
             </Col>
           ))}
-        <div>
+        {/* <div>
           <Button color="primary" className="m-1" onClick={prevPage}>
             Anterior
           </Button>
           <Button color="primary" onClick={nextPage}>
             Siguiente
           </Button>
-        </div>
+        </div> */}
       </Row>
     </>
   );
 };
 
-export default Actas;
+export default DepartamentosCard;

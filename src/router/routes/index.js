@@ -22,8 +22,12 @@ const Routes = [
     component: lazy(() => import("../../views/Ciudades")),
   },
   {
-    path: "/actas",
-    component: lazy(() => import("../../views/Actas")),
+    path: "/departamentos-card",
+    component: lazy(() => import("../../views/DepartamentosCard")),
+  },
+  {
+    path: "/ciudades-card",
+    component: lazy(() => import("../../views/CiudadesCard")),
   },
   {
     path: "/login",

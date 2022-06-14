@@ -16,9 +16,9 @@ export default [
     navLink: "/second-page",
   },
   {
-    id: "actas",
-    title: "Actas",
+    id: "departamentosCard",
+    title: "departamentos Card",
     icon: <Mail size={20} />,
-    navLink: "/actas",
+    navLink: "/departamentos-card",
   },
 ];
