@@ -18,6 +18,10 @@ const Routes = [
     component: lazy(() => import("../../views/Municipios")),
   },
   {
+    path: "/ciudades",
+    component: lazy(() => import("../../views/Ciudades")),
+  },
+  {
     path: "/actas",
     component: lazy(() => import("../../views/Actas")),
   },

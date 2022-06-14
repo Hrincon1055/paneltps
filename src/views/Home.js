@@ -108,27 +108,30 @@ const Home = () => {
       .get(PATHS_API.departamentos)
       .then((response) => {
         if (response.status == 200) {
+          console.log("Home LINE 111 =>");
           setTotales(response.data);
           setDepartamentos(response.data.departamentos);
           setIsLoading(false);
         } else {
-          toast.warn("Ha ocurrido un error");
-          setTotales(null);
-          setDepartamentos(null);
-          setIsLoading(false);
+          // toast.warn("Ha ocurrido un error");
+          // setTotales(null);
+          // setDepartamentos(null);
+          // setIsLoading(false);
+          throw "Ha ocurrido un error";
         }
       })
       .catch((err) => {
         toast.error("Ha ocurrido un error");
         setTotales(null);
-        setDepartamentos(null);
+        setDepartamentos([]);
         setIsLoading(false);
       });
   }, []);
   // FUNCIONES
-  const handleClick = () => {
-    history.push(`/municipios?zona=xxx`);
+  const handleClick = (idDepartamento) => {
+    history.push(`/ciudades?depto=${idDepartamento}`);
   };
+  // http://172.23.157.235:3000/api/ciudad?depto=60
   const handleOpenModal = () => {
     setBasicModal(!basicModal);
   };
@@ -243,7 +246,10 @@ const Home = () => {
           <tbody>
             {departamentos &&
               filteredDepartamentos().map((departamento, index) => (
-                <tr onClick={handleClick} key={index}>
+                <tr
+                  onClick={() => handleClick(departamento.codepar)}
+                  key={index}
+                >
                   <td>{departamento.descripcion.toUpperCase()}</td>
                   <td>{departamento.esperados}</td>
                   <td>{departamento.publicados}</td>
@@ -257,7 +263,7 @@ const Home = () => {
                 </tr>
               ))}
             {totales && (
-              <tr>
+              <tr className="table-primary">
                 <td>TOTALES</td>
                 <td>{totales.sumEsperados}</td>
                 <td>{totales.sumPublicados}</td>
