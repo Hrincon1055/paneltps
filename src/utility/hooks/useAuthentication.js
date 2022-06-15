@@ -9,7 +9,6 @@ export const useAuthentication = () => {
     dispatch(handleLogin(token));
   };
   const setHandleLogout = () => {
-    console.log("useAuthentication LINE 15 =>", "setHandleLogout");
     dispatch(handleLogout());
   };
 

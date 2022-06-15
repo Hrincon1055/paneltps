@@ -31,11 +31,14 @@ import {
   Title,
   Legend,
 } from "chart.js";
-import { useSelector } from "react-redux";
+import { RefreshCcw } from "react-feather";
+// import { useSelector } from "react-redux";
 import { toast } from "react-toastify";
 // MIS COMPONENTES
-import { axiosApi, axiosAuth } from "../libs/axiosApi";
+import { axiosAuth } from "../libs/axiosApi";
 import { PATHS_API } from "../utils/constants";
+import { accessTokenApi } from "../api/auth";
+import { useAuthentication } from "@hooks/useAuthentication";
 
 ChartJS.register(
   ChartDataLabels,
@@ -93,7 +96,8 @@ const options = {
 const Home = () => {
   // HOOKS
   const history = useHistory();
-  const { userToken } = useSelector((state) => state.auth);
+  const { setHandleLogout } = useAuthentication();
+  // const { userToken } = useSelector((state) => state.auth);
   // STATE
   const [departamentos, setDepartamentos] = useState(null);
   const [totales, setTotales] = useState(null);
@@ -102,36 +106,33 @@ const Home = () => {
   const [tooltipOpen, setTooltipOpen] = useState(false);
   const [basicModal, setBasicModal] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  axiosAuth();
+  const [refresh, setRefresh] = useState(false);
+
   // EFFECT
   useEffect(() => {
     setIsLoading(true);
-    axiosAuth(PATHS_API.departamentos, userToken, null)
+    axiosAuth(PATHS_API.departamentos, accessTokenApi(), setHandleLogout)
       .then((response) => {
         if (response.status == 200) {
           setTotales(response.data);
           setDepartamentos(response.data.data);
           setIsLoading(false);
         } else {
-          // toast.warn("Ha ocurrido un error");
-          // setTotales(null);
-          // setDepartamentos(null);
-          // setIsLoading(false);
           throw "Ha ocurrido un error";
         }
       })
       .catch((err) => {
-        toast.error("Ha ocurrido un error");
+        toast.error("Ha ocurrido un error", err);
         setTotales(null);
         setDepartamentos([]);
         setIsLoading(false);
       });
-  }, []);
+    setRefresh(false);
+  }, [refresh]);
   // FUNCIONES
   const handleClick = (idDepartamento) => {
     history.push(`/ciudades?depto=${idDepartamento}`);
   };
-  // http://172.23.157.235:3000/api/ciudad?depto=60
   const handleOpenModal = () => {
     setBasicModal(!basicModal);
   };
@@ -147,23 +148,7 @@ const Home = () => {
     });
     return filterd.slice(currentPage, currentPage + 50);
   };
-  // const nextPage = () => {
-  //   if (
-  //     departamentos.filter((departamento) =>
-  //       departamento.departamento
-  //         .toLowerCase()
-  //         .includes(search.toLocaleLowerCase())
-  //     ).length >
-  //     currentPage + 5
-  //   ) {
-  //     setCurrentPage(currentPage + 5);
-  //   }
-  // };
-  // const prevPage = () => {
-  //   if (currentPage > 0) {
-  //     setCurrentPage(currentPage - 5);
-  //   }
-  // };
+
   const onSearchChange = (e) => {
     setCurrentPage(0);
     setSearch(e.target.value);
@@ -204,14 +189,6 @@ const Home = () => {
           </CardTitle>
         </CardHeader>
         <Row className="mb-1 justify-content-between gap-1 p-1">
-          <Col xl="2" md="2" ms="2">
-            {/* <div>
-              <Input type="select" name="select" id="select-basic">
-                <option>E 11</option>
-                <option>E 14</option>
-              </Input>
-            </div> */}
-          </Col>
           <Col
             className="d-flex align-items-center justify-content-sm-end mt-sm-0"
             sm="12"
@@ -229,6 +206,13 @@ const Home = () => {
               value={search}
               onChange={(e) => onSearchChange(e)}
             />
+          </Col>
+          <Col xl="2" md="2" ms="12">
+            <div>
+              <Button block color="primary" onClick={() => setRefresh(true)}>
+                <RefreshCcw />
+              </Button>
+            </div>
           </Col>
         </Row>
         <Table hover responsive>
@@ -276,15 +260,6 @@ const Home = () => {
           </tbody>
         </Table>
       </Card>
-      {/* <div>
-        <Button color="primary" className="m-1" onClick={prevPage}>
-          Anterior
-        </Button>
-        <Button color="primary" onClick={nextPage}>
-          Siguiente
-        </Button>
-      </div> */}
-
       <Modal
         centered
         isOpen={basicModal}
