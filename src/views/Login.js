@@ -197,7 +197,7 @@ const LoginCover = () => {
                 </Label>
               </div> */}
               <Button color="primary" type="submit" block>
-                {isLoading ? <Spinner /> : "Ingresar"}
+                {isLoading ? <Spinner size="sm" /> : "Ingresar"}
               </Button>
             </Form>
             <p className="text-center mt-2">
