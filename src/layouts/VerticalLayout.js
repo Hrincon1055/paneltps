@@ -14,6 +14,7 @@ const VerticalLayout = (props) => {
   if (!userToken) {
     return <Redirect to="/login" />;
   }
+  // RENDER
   return (
     <Layout menuData={navigation} {...props}>
       {props.children}

@@ -31,9 +31,10 @@ import {
   Title,
   Legend,
 } from "chart.js";
+import { useSelector } from "react-redux";
 import { toast } from "react-toastify";
 // MIS COMPONENTES
-import { axiosApi } from "../libs/axiosApi";
+import { axiosApi, axiosAuth } from "../libs/axiosApi";
 import { PATHS_API } from "../utils/constants";
 
 ChartJS.register(
@@ -92,6 +93,7 @@ const options = {
 const Home = () => {
   // HOOKS
   const history = useHistory();
+  const { userToken } = useSelector((state) => state.auth);
   // STATE
   const [departamentos, setDepartamentos] = useState(null);
   const [totales, setTotales] = useState(null);
@@ -100,16 +102,15 @@ const Home = () => {
   const [tooltipOpen, setTooltipOpen] = useState(false);
   const [basicModal, setBasicModal] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-
+  axiosAuth();
   // EFFECT
   useEffect(() => {
     setIsLoading(true);
-    axiosApi
-      .get(PATHS_API.departamentos)
+    axiosAuth(PATHS_API.departamentos, userToken, null)
       .then((response) => {
         if (response.status == 200) {
           setTotales(response.data);
-          setDepartamentos(response.data.departamentos);
+          setDepartamentos(response.data.data);
           setIsLoading(false);
         } else {
           // toast.warn("Ha ocurrido un error");

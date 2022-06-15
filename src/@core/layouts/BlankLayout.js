@@ -1,6 +1,6 @@
-// ** React Imports
 import { useEffect, useState } from "react";
-
+import { Redirect } from "react-router-dom";
+import { useSelector } from "react-redux";
 // ** Custom Hooks
 import { useSkin } from "@hooks/useSkin";
 
@@ -8,17 +8,20 @@ import { useSkin } from "@hooks/useSkin";
 import classnames from "classnames";
 
 const BlankLayout = ({ children }) => {
-  // ** States
-  const [isMounted, setIsMounted] = useState(false);
-
-  // ** Hooks
+  // HOOKS
   const { skin } = useSkin();
-
+  const { userToken } = useSelector((state) => state.auth);
+  // STATE
+  const [isMounted, setIsMounted] = useState(false);
+  // EFFECT
   useEffect(() => {
     setIsMounted(true);
     return () => setIsMounted(false);
   }, []);
-
+  // RENDER
+  if (userToken) {
+    return <Redirect to="/" />;
+  }
   if (!isMounted) {
     return null;
   }

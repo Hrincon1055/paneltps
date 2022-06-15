@@ -13,7 +13,7 @@ export const authSlice = createSlice({
     handleLogin: (state, action) => {
       state.userToken = action.payload;
       sessionStorage.setItem(ACCESS_TOKEN, JSON.stringify(action.payload));
-      console.log("authentication LINE 23 =>", state.userToken);
+      // console.log("authentication LINE 23 =>", state.userToken);
       // state[config.storageTokenKeyName] =
       //   action.payload[config.storageTokenKeyName];
       // state[config.storageRefreshTokenKeyName] =
@@ -29,6 +29,8 @@ export const authSlice = createSlice({
       // );
     },
     handleLogout: (state) => {
+      sessionStorage.removeItem(ACCESS_TOKEN);
+      state.userToken = null;
       // state.userData = {};
       // state[config.storageTokenKeyName] = null;
       // state[config.storageRefreshTokenKeyName] = null;
