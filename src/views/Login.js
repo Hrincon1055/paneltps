@@ -1,8 +1,9 @@
 /* eslint-disable comma-dangle */
 /* eslint-disable semi */
+import { useState } from "react";
 import { useSkin } from "@hooks/useSkin";
-import { Link } from "react-router-dom";
-import { Facebook, Twitter, Mail, GitHub } from "react-feather";
+import { Link, useHistory } from "react-router-dom";
+import { Facebook, Twitter, Mail, GitHub, X } from "react-feather";
 import InputPasswordToggle from "@components/input-password-toggle";
 import {
   Row,
@@ -14,22 +15,56 @@ import {
   Input,
   Button,
   FormFeedback,
+  Spinner,
 } from "reactstrap";
+import { toast } from "react-toastify";
 import "@styles/react/pages/page-authentication.scss";
-
+// MIS COMPONENTES
 import { useAuthentication } from "@hooks/useAuthentication";
 import { useSelector } from "react-redux";
+import { PATHS_API } from "../utils/constants";
+import { axiosApi } from "../libs/axiosApi";
 // INICIO
 const LoginCover = () => {
   // HOOKS
+  const history = useHistory();
   const { skin } = useSkin();
-  const { setHandleLogin, setHandleLogout } = useAuthentication();
+  const { setHandleLogin } = useAuthentication();
   const store = useSelector((state) => state.auth);
-  // FUNCIONES
+  // STATE
+  const [user, setUser] = useState("");
+  const [password, setPassword] = useState("");
+  const [errors, setErrors] = useState({ user: false, password: false });
+  const [isLoading, setIsLoading] = useState(false);
+  // CONSTANTES
   const illustration = skin === "dark" ? "login_dark.svg" : "login_light.svg",
     source = require(`@src/assets/images/pages/${illustration}`).default;
-  const login = () => {
-    setHandleLogin();
+  // FUNCIONES
+  const login = (e) => {
+    e.preventDefault();
+    if (user.trim().length <= 0) {
+      setErrors((preErrors) => ({ ...preErrors, user: true }));
+      return;
+    }
+    if (password.trim().length <= 0) {
+      setErrors((preErrors) => ({ ...preErrors, password: true }));
+      return;
+    }
+    setErrors({});
+    setIsLoading(true);
+    axiosApi
+      .post(PATHS_API.user, { user, password })
+      .then((response) => {
+        if (response.status == 200) {
+          setHandleLogin(response.data.token);
+          history.push("/");
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+        setIsLoading(false);
+        toast.error("Ha ocurrido un error");
+      });
   };
   // RENDER
   return (
@@ -121,21 +156,21 @@ const LoginCover = () => {
             <CardText className="mb-2">
               Please sign-in to your account and start the adventure
             </CardText>
-            <Form
-              className="auth-login-form mt-2"
-              onSubmit={(e) => e.preventDefault()}
-            >
+            <Form className="auth-login-form mt-2" onSubmit={(e) => login(e)}>
               <div className="mb-1">
                 <Label className="form-label" for="login-email">
                   Email
                 </Label>
                 <Input
-                  type="email"
-                  id="login-email error"
+                  type="text"
+                  id="user"
+                  name="user"
                   placeholder="john@example.com"
                   autoFocus
+                  invalid={errors.user}
+                  onChange={(e) => setUser(e.target.value)}
                 />
-                <FormFeedback>Oh noes! that name is already taken</FormFeedback>
+                <FormFeedback>El usuario es obligatorio</FormFeedback>
               </div>
               <div className="mb-1">
                 <div className="d-flex justify-content-between">
@@ -148,17 +183,21 @@ const LoginCover = () => {
                 </div>
                 <InputPasswordToggle
                   className="input-group-merge "
-                  id="login-password"
+                  id="password"
+                  name="password"
+                  invalid={errors.password}
+                  onChange={(e) => setPassword(e.target.value)}
                 />
+                <FormFeedback>El password es obligatorio</FormFeedback>
               </div>
-              <div className="form-check mb-1">
+              {/* <div className="form-check mb-1">
                 <Input type="checkbox" id="remember-me" />
                 <Label className="form-check-label" for="remember-me">
                   Remember Me
                 </Label>
-              </div>
-              <Button color="primary" onClick={login} block>
-                Sign in
+              </div> */}
+              <Button color="primary" type="submit" block>
+                {isLoading ? <Spinner /> : "Ingresar"}
               </Button>
             </Form>
             <p className="text-center mt-2">

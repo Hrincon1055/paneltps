@@ -11,4 +11,5 @@ export const PATHS_API = {
   departamentos: "/deptos",
   ciudad: "/ciudad",
   ciudadesCard: "ciudades-card",
+  user: "/user",
 };
