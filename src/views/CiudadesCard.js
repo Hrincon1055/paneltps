@@ -23,7 +23,7 @@ export const CiudadesCard = () => {
       .get(`${PATHS_API.ciudad}?depto=${depto}`)
       .then((response) => {
         setIsLoading(false);
-        setCiudades(response.data.departamentos);
+        setCiudades(response.data);
       })
       .catch((err) => {
         toast.error("Ha ocurrido un error");

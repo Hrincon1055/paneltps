@@ -1,6 +1,6 @@
 import { lazy } from "react";
 // ** Document title
-const TemplateTitle = "%s - Vuexy React Admin Template";
+const TemplateTitle = "Panel E11";
 // ** Default Route
 const DefaultRoute = "/home";
 // ** Merge Routes
@@ -41,6 +41,10 @@ const Routes = [
     path: "/error",
     component: lazy(() => import("../../views/Error")),
     layout: "BlankLayout",
+  },
+  {
+    path: "/prueba",
+    component: lazy(() => import("../../views/Pruebas")),
   },
 ];
 

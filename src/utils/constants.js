@@ -10,6 +10,10 @@ export const BASE_URL = BASE_URL_PROD;
 export const PATHS_API = {
   departamentos: "/deptos",
   ciudad: "/ciudad",
-  ciudadesCard: "ciudades-card",
+  zona: "/zona",
+  puesto: "/puesto",
+  mesa: "/mesa",
+
+  // login
   user: "/user",
 };

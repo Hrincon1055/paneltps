@@ -1,6 +1,6 @@
 /* eslint-disable semi */
 /* eslint-disable comma-dangle */
-import { Mail, Home } from "react-feather";
+import { Mail, Home, PieChart } from "react-feather";
 
 export default [
   {
@@ -18,7 +18,7 @@ export default [
   {
     id: "departamentosCard",
     title: "departamentos Card",
-    icon: <Mail size={20} />,
+    icon: <PieChart size={20} />,
     navLink: "/departamentos-card",
   },
 ];

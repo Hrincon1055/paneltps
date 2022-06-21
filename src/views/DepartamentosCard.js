@@ -21,6 +21,7 @@ import { RefreshCcw } from "react-feather";
 // MIS COMPONENTES
 import { axiosApi } from "../libs/axiosApi";
 import { PATHS_API } from "../utils/constants";
+import { filterdSearch } from "../utils/utils";
 
 // INICIO
 const DepartamentosCard = () => {
@@ -29,7 +30,6 @@ const DepartamentosCard = () => {
   // STATE
   const [departamentos, setDepartamentos] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
-  const [totales, setTotales] = useState(null);
 
   // const [currentPage, setCurrentPage] = useState(0);
   const [search, setSearch] = useState("");
@@ -41,8 +41,8 @@ const DepartamentosCard = () => {
       .get(PATHS_API.departamentos)
       .then((response) => {
         if (response.status == 200) {
-          setTotales(response.data);
-          setDepartamentos(response.data.departamentos);
+          console.log(response);
+          setDepartamentos(response.data);
           setIsLoading(false);
         } else {
           throw "Ha ocurrido un error";
@@ -50,20 +50,11 @@ const DepartamentosCard = () => {
       })
       .catch((err) => {
         toast.error("Ha ocurrido un error", err);
-        setTotales(null);
-        setDepartamentos([]);
+        setDepartamentos(null);
         setIsLoading(false);
       });
   }, []);
   // FUNCIONES
-  const filteredDepartamentos = () => {
-    const filterd = departamentos.filter((departamento) => {
-      return departamento.descripcion
-        .toLowerCase()
-        .includes(search.toLowerCase());
-    });
-    return filterd;
-  };
 
   const handleClick = (idDepartamento) => {
     console.log("DepartamentosCard LINE 66 =>", idDepartamento);
@@ -73,6 +64,9 @@ const DepartamentosCard = () => {
     // setCurrentPage(0);
     setSearch(e.target.value);
   };
+
+  // if (departamentos)
+  //   console.log(filterdSearch(departamentos.data, "descripcion", search));
 
   // RENDER
 
@@ -168,62 +162,66 @@ const DepartamentosCard = () => {
       </Row>
       <Row>
         {departamentos &&
-          filteredDepartamentos().map((departamento) => (
-            <Col sm="4" key={departamento.codepar}>
-              <Card
-                className="cursor-pointer"
-                onClick={() => handleClick(departamento.codepar)}
-              >
-                <CardHeader>
-                  <Row>
-                    <CardTitle>Esperadas</CardTitle>
-                    <p>{departamento.esperados}</p>
-                  </Row>
-                  <Row className="text-end">
-                    <CardTitle>#</CardTitle>
-                    <p>{departamento.codepar}</p>
-                  </Row>
-                </CardHeader>
-                <CardBody className="text-center">
-                  <CardText>{departamento.descripcion.toUpperCase()}</CardText>
-                </CardBody>
-                <CardFooter className="text-muted">
-                  <Row className="mb-1">
-                    <Col>
-                      <span>Publicados {departamento.publicados}%</span>
-                      <Progress
-                        color="info"
-                        style={{ height: "8px" }}
-                        value={departamento.publicados}
-                      />
-                    </Col>
-                  </Row>
-                  <Row>
-                    <Col>
-                      <span style={{ fontSize: "12px" }}>
-                        Sin Publicar {departamento.sinPublicar}%
-                      </span>
-                      <Progress
-                        color="warning"
-                        style={{ height: "8px" }}
-                        value={departamento.sinPublicar}
-                      />
-                    </Col>
-                    <Col>
-                      <span style={{ fontSize: "12px" }}>
-                        Faltantes {departamento.faltantes}%
-                      </span>
-                      <Progress
-                        color="danger"
-                        style={{ height: "8px" }}
-                        value={departamento.faltantes}
-                      />
-                    </Col>
-                  </Row>
-                </CardFooter>
-              </Card>
-            </Col>
-          ))}
+          filterdSearch(departamentos.data, "descripcion", search).map(
+            (departamento) => (
+              <Col sm="4" key={departamento.codepar}>
+                <Card
+                  className="cursor-pointer"
+                  onClick={() => handleClick(departamento.codepar)}
+                >
+                  <CardHeader>
+                    <Row>
+                      <CardTitle>Esperadas</CardTitle>
+                      <p>{departamento.esperados}</p>
+                    </Row>
+                    <Row className="text-end">
+                      <CardTitle>#</CardTitle>
+                      <p>{departamento.codepar}</p>
+                    </Row>
+                  </CardHeader>
+                  <CardBody className="text-center">
+                    <CardText>
+                      {departamento.descripcion.toUpperCase()}
+                    </CardText>
+                  </CardBody>
+                  <CardFooter className="text-muted">
+                    <Row className="mb-1">
+                      <Col>
+                        <span>Publicados {departamento.publicados}%</span>
+                        <Progress
+                          color="info"
+                          style={{ height: "8px" }}
+                          value={departamento.publicados}
+                        />
+                      </Col>
+                    </Row>
+                    <Row>
+                      <Col>
+                        <span style={{ fontSize: "12px" }}>
+                          Sin Publicar {departamento.sinPublicar}%
+                        </span>
+                        <Progress
+                          color="warning"
+                          style={{ height: "8px" }}
+                          value={departamento.sinPublicar}
+                        />
+                      </Col>
+                      <Col>
+                        <span style={{ fontSize: "12px" }}>
+                          Faltantes {departamento.faltantes}%
+                        </span>
+                        <Progress
+                          color="danger"
+                          style={{ height: "8px" }}
+                          value={departamento.faltantes}
+                        />
+                      </Col>
+                    </Row>
+                  </CardFooter>
+                </Card>
+              </Col>
+            )
+          )}
         {/* <div>
           <Button color="primary" className="m-1" onClick={prevPage}>
             Anterior

@@ -1,6 +1,6 @@
 /* eslint-disable semi */
 /* eslint-disable comma-dangle */
-import { Mail, Home } from "react-feather";
+import { Mail, Home, PieChart } from "react-feather";
 
 export default [
   {
@@ -10,15 +10,15 @@ export default [
     navLink: "/home",
   },
   {
-    id: "secondPage",
-    title: "Second Page",
-    icon: <Mail size={20} />,
-    navLink: "/second-page",
+    id: "departamentosCard",
+    title: "home card",
+    icon: <PieChart size={20} />,
+    navLink: "/departamentos-card",
   },
   {
-    id: "departamentosCard",
-    title: "departamentos Card",
+    id: "secondPage",
+    title: "Pruebas",
     icon: <Mail size={20} />,
-    navLink: "/departamentos-card",
+    navLink: "/second-page",
   },
 ];

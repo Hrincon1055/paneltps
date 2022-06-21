@@ -11,9 +11,9 @@ const VerticalLayout = (props) => {
   // console.log("VerticalLayout LINE 12 =>", store);
   // useEffect(() => {}, [store.userToken]);
   // RENDER
-  if (!userToken) {
-    return <Redirect to="/login" />;
-  }
+  // if (!userToken) {
+  //   return <Redirect to="/login" />;
+  // }
   // RENDER
   return (
     <Layout menuData={navigation} {...props}>
