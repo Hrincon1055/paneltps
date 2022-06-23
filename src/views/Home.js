@@ -49,12 +49,14 @@ ChartJS.register(
   Legend
 );
 
+// data configuraciones grafico
+
 const labels = ["publicadas", "faltantes"];
 const data = {
   labels: labels,
   datasets: [
     {
-      data: [65, 67],
+      data: [0, 0],
       backgroundColor: ["rgb(255, 99, 132)", "rgb(255, 159, 64)"],
       borderColor: ["rgba(255, 99, 132, 0.2)", "rgba(255, 159, 64, 0.2)"],
       borderWidth: 1,
@@ -103,19 +105,30 @@ const Home = () => {
   const [totales, setTotales] = useState(null);
   const [currentPage, setCurrentPage] = useState(0);
   const [search, setSearch] = useState("");
-  const [tooltipOpen, setTooltipOpen] = useState(false);
+  // const [tooltipOpen, setTooltipOpen] = useState(false);
+  const [tooltipOpen, setTooltipOpen] = useState({
+    avance: false,
+    refresh: false,
+  });
   const [basicModal, setBasicModal] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [refresh, setRefresh] = useState(false);
 
   // EFFECT
   useEffect(() => {
+    setTooltipOpen({ refresh: false });
     setIsLoading(true);
     axiosAuth(PATHS_API.departamentos, accessTokenApi(), setHandleLogout)
       .then((response) => {
         if (response.status == 200) {
           setTotales(response.data);
           setDepartamentos(response.data.data);
+
+          data.datasets[0].data = [
+            response.data.sumPublicados,
+            response.data.sumfaltantes,
+          ];
+
           setIsLoading(false);
         } else {
           throw "Ha ocurrido un error";
@@ -129,6 +142,7 @@ const Home = () => {
       });
     setRefresh(false);
   }, [refresh]);
+
   // FUNCIONES
   const handleClick = (idDepartamento) => {
     history.push(`/ciudades?depto=${idDepartamento}`);
@@ -165,56 +179,55 @@ const Home = () => {
   // RENDER
   return (
     <>
-      <Card>
+      <Card className="mb-1">
         <CardHeader className="border-bottom">
-          <CardTitle tag="h4">Server Side</CardTitle>
-          <CardTitle tag="h4">
-            <div id="TooltipExample">
-              <Share
-                className="icon-modal"
-                size={30}
-                onClick={handleOpenModal}
+          <CardTitle tag="h6">Departamentos</CardTitle>
+        </CardHeader>
+
+        <CardHeader className="border-bottom">
+          <CardTitle>
+            <div className="d-flex align-items-center">
+              <Label className="me-1" for="search-input">
+                Buscar
+              </Label>
+              <Input
+                className="dataTable-filter"
+                type="text"
+                bsSize="md"
+                name="search"
+                id="search"
+                value={search}
+                onChange={(e) => onSearchChange(e)}
+                style={{ width: "80vh" }}
               />
             </div>
-            <Tooltip
-              isOpen={tooltipOpen}
-              flip
-              target="TooltipExample"
-              toggle={() => {
-                setTooltipOpen(!tooltipOpen);
-              }}
-            >
-              {"Avance publicadas"}
-            </Tooltip>
+          </CardTitle>
+          <CardTitle tag="h4">
+            <Row>
+              <Col>
+                <div id="avance">
+                  <Share
+                    onClick={handleOpenModal}
+                    className="icon-modal"
+                    size={30}
+                  />
+                </div>
+              </Col>
+              <Col>
+                <div id="refresh">
+                  <RefreshCcw
+                    className="icon-modal"
+                    size={30}
+                    onClick={() => setRefresh(true)}
+                  />
+                </div>
+              </Col>
+            </Row>
           </CardTitle>
         </CardHeader>
-        <Row className="mb-1 justify-content-between gap-1 p-1">
-          <Col
-            className="d-flex align-items-center justify-content-sm-end mt-sm-0"
-            sm="12"
-            md="6"
-          >
-            <Label className="me-1" for="search-input">
-              Search
-            </Label>
-            <Input
-              className="dataTable-filter"
-              type="text"
-              bsSize="md"
-              name="search"
-              id="search"
-              value={search}
-              onChange={(e) => onSearchChange(e)}
-            />
-          </Col>
-          <Col xl="2" md="2" ms="12">
-            <div>
-              <Button block color="primary" onClick={() => setRefresh(true)}>
-                <RefreshCcw />
-              </Button>
-            </div>
-          </Col>
-        </Row>
+      </Card>
+
+      <Card>
         <Table hover responsive>
           <thead>
             <tr>
@@ -266,7 +279,7 @@ const Home = () => {
         toggle={() => setBasicModal(!basicModal)}
       >
         <ModalHeader toggle={() => setBasicModal(!basicModal)}>
-          Basic Modal
+          Avance General publicadas
         </ModalHeader>
         <ModalBody>
           <div style={{ height: "40vh", width: "100%", position: "relative" }}>
@@ -275,10 +288,32 @@ const Home = () => {
         </ModalBody>
         <ModalFooter>
           <Button color="primary" onClick={() => setBasicModal(!basicModal)}>
-            Accept
+            Salir
           </Button>
         </ModalFooter>
       </Modal>
+
+      <Tooltip
+        isOpen={tooltipOpen.avance}
+        flip
+        target="avance"
+        toggle={() => {
+          setTooltipOpen({ avance: !tooltipOpen.avance });
+        }}
+      >
+        {"Avance publicadas"}
+      </Tooltip>
+
+      <Tooltip
+        isOpen={tooltipOpen.refresh}
+        flip
+        target="refresh"
+        toggle={() => {
+          setTooltipOpen({ refresh: !tooltipOpen.refresh });
+        }}
+      >
+        {"Refrescar tabla"}
+      </Tooltip>
     </>
   );
 };

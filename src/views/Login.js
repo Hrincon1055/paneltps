@@ -137,7 +137,7 @@ const LoginCover = () => {
               </g>
             </g>
           </svg>
-          <h2 className="brand-text text-primary ms-1">Vuexy</h2>
+          <h2 className="brand-text text-primary ms-1">Visualizador E11</h2>
         </Link>
         <Col className="d-none d-lg-flex align-items-center p-5" lg="8" sm="12">
           <div className="w-100 d-lg-flex align-items-center justify-content-center px-5">
@@ -151,21 +151,20 @@ const LoginCover = () => {
         >
           <Col className="px-xl-2 mx-auto" sm="8" md="6" lg="12">
             <CardTitle tag="h2" className="fw-bold mb-1">
-              Welcome to Vuexy! 👋
+              Bienvenido al panel E11 ! 👋
             </CardTitle>
             <CardText className="mb-2">
-              Please sign-in to your account and start the adventure
+              Por favor, ingrese sus credenciales.
             </CardText>
             <Form className="auth-login-form mt-2" onSubmit={(e) => login(e)}>
               <div className="mb-1">
                 <Label className="form-label" for="login-email">
-                  Email
+                  usuario
                 </Label>
                 <Input
                   type="text"
                   id="user"
                   name="user"
-                  placeholder="john@example.com"
                   autoFocus
                   invalid={errors.user}
                   onChange={(e) => setUser(e.target.value)}
@@ -175,11 +174,8 @@ const LoginCover = () => {
               <div className="mb-1">
                 <div className="d-flex justify-content-between">
                   <Label className="form-label" for="login-password">
-                    Password
+                    contraseña
                   </Label>
-                  <Link to="/pages/forgot-password-cover">
-                    <small>Forgot Password?</small>
-                  </Link>
                 </div>
                 <InputPasswordToggle
                   className="input-group-merge "
@@ -190,39 +186,10 @@ const LoginCover = () => {
                 />
                 <FormFeedback>El password es obligatorio</FormFeedback>
               </div>
-              {/* <div className="form-check mb-1">
-                <Input type="checkbox" id="remember-me" />
-                <Label className="form-check-label" for="remember-me">
-                  Remember Me
-                </Label>
-              </div> */}
               <Button color="primary" type="submit" block>
                 {isLoading ? <Spinner size="sm" /> : "Ingresar"}
               </Button>
             </Form>
-            <p className="text-center mt-2">
-              <span className="me-25">New on our platform?</span>
-              <Link to="/pages/register-cover">
-                <span>Create an account</span>
-              </Link>
-            </p>
-            <div className="divider my-2">
-              <div className="divider-text">or</div>
-            </div>
-            <div className="auth-footer-btn d-flex justify-content-center">
-              <Button color="facebook">
-                <Facebook size={14} />
-              </Button>
-              <Button color="twitter">
-                <Twitter size={14} />
-              </Button>
-              <Button color="google">
-                <Mail size={14} />
-              </Button>
-              <Button className="me-0" color="github">
-                <GitHub size={14} />
-              </Button>
-            </div>
           </Col>
         </Col>
       </Row>

@@ -26,14 +26,14 @@ import { filterdSearch } from "../utils/utils";
 import { useAuthentication } from "@hooks/useAuthentication";
 
 // INICIO
-const Ciudades = () => {
+const Puestos = () => {
   // HOOKS
   const location = useLocation();
   const history = useHistory();
   const { setHandleLogout } = useAuthentication();
 
   // STATE
-  const [ciudades, setCiudades] = useState(null);
+  const [puestos, setPuestos] = useState(null);
   const [search, setSearch] = useState("");
   const [tooltipOpen, setTooltipOpen] = useState({
     refresh: false,
@@ -42,18 +42,18 @@ const Ciudades = () => {
   const [refresh, setRefresh] = useState(false);
 
   // CONSTANTES
-  const { depto } = queryString.parse(location.search);
+  const { depto, ciudad, zona } = queryString.parse(location.search);
 
   // EFFECTS
   useEffect(() => {
     setTooltipOpen({ refresh: false });
     setIsLoading(true);
     axiosApi
-      .get(`${PATHS_API.ciudad}?depto=${depto}`)
+      .get(`${PATHS_API.puesto}?depto=${depto}&ciudad=${ciudad}&zona=${zona}`)
       .then((response) => {
         if (response.status == 200) {
           console.log(response.data);
-          setCiudades(response.data);
+          setPuestos(response.data);
           setIsLoading(false);
         } else {
           // toast.warn("Ha ocurrido un error");
@@ -62,15 +62,17 @@ const Ciudades = () => {
       })
       .catch((err) => {
         toast.error("Ha ocurrido un error", err);
-        setCiudades(null);
+        setPuestos(null);
         setIsLoading(false);
       });
     setRefresh(false);
-  }, [depto, refresh]);
+  }, [depto, ciudad, zona, refresh]);
 
   // FUNCIONES
-  const handleClick = (idDepartamento, idCiudad) => {
-    history.push(`/zonas?depto=${idDepartamento}&ciudad=${idCiudad}`);
+  const handleClick = (idDepartamento, idCiudad, idZona, idPuesto) => {
+    history.push(
+      `/mesas?depto=${idDepartamento}&ciudad=${idCiudad}&zona=${idZona}&puesto=${idPuesto}`
+    );
   };
 
   const onSearchChange = (e) => {
@@ -92,7 +94,7 @@ const Ciudades = () => {
     <>
       <Card className="mb-1">
         <CardHeader className="border-bottom">
-          <CardTitle tag="h6">Ciudades de ....</CardTitle>
+          <CardTitle tag="h6">Puestos de ....</CardTitle>
         </CardHeader>
 
         <CardHeader className="border-bottom">
@@ -129,7 +131,7 @@ const Ciudades = () => {
           <thead>
             <tr>
               <th>Código</th>
-              <th>Municipio</th>
+              <th>Puesto</th>
               <th>Esperados</th>
               <th>Publicados</th>
               <th>#Avance</th>
@@ -139,41 +141,43 @@ const Ciudades = () => {
             </tr>
           </thead>
           <tbody>
-            {ciudades &&
-              filterdSearch(ciudades.data, "descripcion", search).map(
-                (ciudad, index) => (
+            {puestos &&
+              filterdSearch(puestos.data, "descripcion", search).map(
+                (puesto, index) => (
                   <tr
                     key={index}
-                    onClick={() => handleClick(depto, ciudad.municipio)}
+                    onClick={() =>
+                      handleClick(depto, ciudad, zona, puesto.municipio)
+                    }
                   >
-                    <td>{ciudad.municipio}</td>
-                    <td>{ciudad.descripcion.toUpperCase()}</td>
-                    <td>{ciudad.esperados}</td>
-                    <td>{ciudad.publicados}</td>
+                    <td>{puesto.municipio}</td>
+                    <td>{puesto.descripcion.toUpperCase()}</td>
+                    <td>{puesto.esperados}</td>
+                    <td>{puesto.publicados}</td>
                     <td>
-                      <span>{ciudad.avance}%</span>
-                      <Progress value={ciudad.avance} />
+                      <span>{puesto.avance}%</span>
+                      <Progress value={puesto.avance} />
                     </td>
-                    <td>{ciudad.sinPublicar}</td>
-                    <td>{ciudad.e11Certificados}</td>
-                    <td>{ciudad.faltantes}</td>
+                    <td>{puesto.sinPublicar}</td>
+                    <td>{puesto.e11Certificados}</td>
+                    <td>{puesto.faltantes}</td>
                   </tr>
                 )
               )}
 
-            {ciudades && (
+            {puestos && (
               <tr className="table-primary">
                 <td></td>
                 <td>TOTALES</td>
-                <td>{ciudades.sumEsperados}</td>
-                <td>{ciudades.sumPublicados}</td>
+                <td>{puestos.sumEsperados}</td>
+                <td>{puestos.sumPublicados}</td>
                 <td>
-                  <span>{ciudades.promAvance}%</span>
-                  <Progress value={ciudades.promAvance} />
+                  <span>{puestos.promAvance}%</span>
+                  <Progress value={puestos.promAvance} />
                 </td>
-                <td>{ciudades.sumSinPublicar}</td>
-                <td>{ciudades.sumE11Certificados}</td>
-                <td>{ciudades.sumfaltantes}</td>
+                <td>{puestos.sumSinPublicar}</td>
+                <td>{puestos.sumE11Certificados}</td>
+                <td>{puestos.sumfaltantes}</td>
               </tr>
             )}
           </tbody>
@@ -194,4 +198,4 @@ const Ciudades = () => {
   );
 };
 
-export default Ciudades;
+export default Puestos;

@@ -26,14 +26,14 @@ import { filterdSearch } from "../utils/utils";
 import { useAuthentication } from "@hooks/useAuthentication";
 
 // INICIO
-const Ciudades = () => {
+const Zonas = () => {
   // HOOKS
   const location = useLocation();
   const history = useHistory();
   const { setHandleLogout } = useAuthentication();
 
   // STATE
-  const [ciudades, setCiudades] = useState(null);
+  const [zonas, setZonas] = useState(null);
   const [search, setSearch] = useState("");
   const [tooltipOpen, setTooltipOpen] = useState({
     refresh: false,
@@ -42,18 +42,18 @@ const Ciudades = () => {
   const [refresh, setRefresh] = useState(false);
 
   // CONSTANTES
-  const { depto } = queryString.parse(location.search);
+  const { depto, ciudad } = queryString.parse(location.search);
 
   // EFFECTS
   useEffect(() => {
     setTooltipOpen({ refresh: false });
     setIsLoading(true);
     axiosApi
-      .get(`${PATHS_API.ciudad}?depto=${depto}`)
+      .get(`${PATHS_API.zona}?depto=${depto}&ciudad=${ciudad}`)
       .then((response) => {
         if (response.status == 200) {
           console.log(response.data);
-          setCiudades(response.data);
+          setZonas(response.data);
           setIsLoading(false);
         } else {
           // toast.warn("Ha ocurrido un error");
@@ -62,15 +62,17 @@ const Ciudades = () => {
       })
       .catch((err) => {
         toast.error("Ha ocurrido un error", err);
-        setCiudades(null);
+        setZonas(null);
         setIsLoading(false);
       });
     setRefresh(false);
-  }, [depto, refresh]);
+  }, [depto, ciudad, refresh]);
 
   // FUNCIONES
-  const handleClick = (idDepartamento, idCiudad) => {
-    history.push(`/zonas?depto=${idDepartamento}&ciudad=${idCiudad}`);
+  const handleClick = (idDepartamento, idCiudad, idZona) => {
+    history.push(
+      `/puestos?depto=${idDepartamento}&ciudad=${idCiudad}&zona=${idZona}`
+    );
   };
 
   const onSearchChange = (e) => {
@@ -92,7 +94,7 @@ const Ciudades = () => {
     <>
       <Card className="mb-1">
         <CardHeader className="border-bottom">
-          <CardTitle tag="h6">Ciudades de ....</CardTitle>
+          <CardTitle tag="h6">Zonas de ....</CardTitle>
         </CardHeader>
 
         <CardHeader className="border-bottom">
@@ -129,7 +131,7 @@ const Ciudades = () => {
           <thead>
             <tr>
               <th>Código</th>
-              <th>Municipio</th>
+              <th>Zona</th>
               <th>Esperados</th>
               <th>Publicados</th>
               <th>#Avance</th>
@@ -139,41 +141,43 @@ const Ciudades = () => {
             </tr>
           </thead>
           <tbody>
-            {ciudades &&
-              filterdSearch(ciudades.data, "descripcion", search).map(
-                (ciudad, index) => (
+            {zonas &&
+              filterdSearch(zonas.data, "descripcion", search).map(
+                (zona, index) => (
                   <tr
                     key={index}
-                    onClick={() => handleClick(depto, ciudad.municipio)}
+                    onClick={() =>
+                      handleClick(depto, ciudad, zona.porcInformado)
+                    }
                   >
-                    <td>{ciudad.municipio}</td>
-                    <td>{ciudad.descripcion.toUpperCase()}</td>
-                    <td>{ciudad.esperados}</td>
-                    <td>{ciudad.publicados}</td>
+                    <td>{zona.porcInformado}</td>
+                    <td>{zona.descripcion.toUpperCase()}</td>
+                    <td>{zona.esperados}</td>
+                    <td>{zona.publicados}</td>
                     <td>
-                      <span>{ciudad.avance}%</span>
-                      <Progress value={ciudad.avance} />
+                      <span>{zona.avance}%</span>
+                      <Progress value={zona.avance} />
                     </td>
-                    <td>{ciudad.sinPublicar}</td>
-                    <td>{ciudad.e11Certificados}</td>
-                    <td>{ciudad.faltantes}</td>
+                    <td>{zona.sinPublicar}</td>
+                    <td>{zona.e11Certificados}</td>
+                    <td>{zona.faltantes}</td>
                   </tr>
                 )
               )}
 
-            {ciudades && (
+            {zonas && (
               <tr className="table-primary">
                 <td></td>
                 <td>TOTALES</td>
-                <td>{ciudades.sumEsperados}</td>
-                <td>{ciudades.sumPublicados}</td>
+                <td>{zonas.sumEsperados}</td>
+                <td>{zonas.sumPublicados}</td>
                 <td>
-                  <span>{ciudades.promAvance}%</span>
-                  <Progress value={ciudades.promAvance} />
+                  <span>{zonas.promAvance}%</span>
+                  <Progress value={zonas.promAvance} />
                 </td>
-                <td>{ciudades.sumSinPublicar}</td>
-                <td>{ciudades.sumE11Certificados}</td>
-                <td>{ciudades.sumfaltantes}</td>
+                <td>{zonas.sumSinPublicar}</td>
+                <td>{zonas.sumE11Certificados}</td>
+                <td>{zonas.sumfaltantes}</td>
               </tr>
             )}
           </tbody>
@@ -194,4 +198,4 @@ const Ciudades = () => {
   );
 };
 
-export default Ciudades;
+export default Zonas;
