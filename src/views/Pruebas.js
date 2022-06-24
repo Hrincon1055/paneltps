@@ -46,6 +46,9 @@ const Pruebas = () => {
   const [tooltipOpen, setTooltipOpen] = useState({
     avance: false,
     refresh: false,
+    publicados: false,
+    sinPublicar: false,
+    e11certificados: false,
   });
   const [basicModal, setBasicModal] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -100,22 +103,15 @@ const Pruebas = () => {
   const tootlTipsProgress = () => {
     return (
       <>
-        <Tooltip
-          isOpen={() => {
-            console.log("anrio");
-          }}
-          flip
-          target="publicadas"
-          toggle={() => {}}
-        >
+        {/* <Tooltip isOpen={true} target="publicadas" toggle={() => {}}>
           {"publicadas"}
-        </Tooltip>
-        <Tooltip isOpen={{}} flip target="e11" toggle={() => {}}>
+        </Tooltip> */}
+        {/* <Tooltip isOpen={{}} flip target="e11" toggle={() => {}}>
           {"e11"}
         </Tooltip>
         <Tooltip isOpen={{}} flip target="sin-publicar" toggle={() => {}}>
           {"sin-publicar"}
-        </Tooltip>
+        </Tooltip> */}
       </>
     );
   };
@@ -229,59 +225,7 @@ const Pruebas = () => {
           </CardTitle>
         </CardHeader>
       </Card> */}
-      {/* {tootlTips()} */}
-      <Row>
-        <Col lg="6" md="6" ms="4">
-          <Card>
-            <CardHeader>
-              <CardTitle className="text-center">Create Awesome</CardTitle>
-            </CardHeader>
-            <CardBody>
-              <Progress multi>
-                <Progress bar color="info" value="15" />
-                <Progress bar color="warning" value="20" />
-                <Progress bar color="danger" value="15" />
-              </Progress>
-              <div className="d-flex justify-content-center mt-1 gap-1 flex-md-row flex-lg-row">
-                <Badge color="info" pill>
-                  Completadas
-                </Badge>
-                <Badge pill color="warning">
-                  Incompletas
-                </Badge>
-                <Badge color="danger" pill>
-                  Faltantes
-                </Badge>
-              </div>
-            </CardBody>
-          </Card>
-        </Col>
-        <Col lg="6" md="6" ms="4">
-          <Card>
-            <CardHeader>
-              <CardTitle>Create Awesome</CardTitle>
-            </CardHeader>
-            <CardBody>
-              <Progress multi>
-                <Progress bar color="info" value="15" />
-                <Progress bar color="warning" value="20" />
-                <Progress bar color="danger" value="15" />
-              </Progress>
-              <div className="d-flex justify-content-center mt-1 gap-1 flex-md-row flex-lg-row">
-                <Badge color="info" pill>
-                  Completadas
-                </Badge>
-                <Badge pill color="warning">
-                  Incompletas
-                </Badge>
-                <Badge color="danger" pill>
-                  Faltantes
-                </Badge>
-              </div>
-            </CardBody>
-          </Card>
-        </Col>
-      </Row>
+
       <Card>
         <CardHeader className="border-bottom">
           <CardTitle>
@@ -319,124 +263,6 @@ const Pruebas = () => {
         </CardHeader>
       </Card>
 
-      <Row>
-        <Col sm="4" key={1}>
-          <Card className="cursor-pointer">
-            <CardHeader>
-              <Row>
-                <CardTitle>Esperadas</CardTitle>
-                <p>{1}</p>
-              </Row>
-              <Row className="text-end">
-                <CardTitle>co</CardTitle>
-                <p>{"1"}</p>
-              </Row>
-            </CardHeader>
-            <CardBody className="text-center">
-              <CardText>{"ANTIOQUIA"}</CardText>
-            </CardBody>
-            <CardFooter className="text-muted">
-              <Row className="mb-1">
-                <Col>
-                  <span>Publicados {"10"} %</span>
-                  <Progress
-                    color="info"
-                    style={{ height: "8px" }}
-                    value={"10"}
-                  />
-                </Col>
-              </Row>
-              <Row>
-                <Col>
-                  <span style={{ fontSize: "12px" }}>Sin Publicar {"10"}%</span>
-                  <Progress
-                    color="warning"
-                    style={{ height: "8px" }}
-                    value={"10 % "}
-                  />
-                </Col>
-                <Col>
-                  <span style={{ fontSize: "12px" }}>Faltantes {" 10%"}%</span>
-                  <Progress
-                    color="danger"
-                    style={{ height: "8px" }}
-                    value={"10 %"}
-                  />
-                </Col>
-              </Row>
-            </CardFooter>
-          </Card>
-        </Col>
-      </Row>
-      <Row>
-        <Col sm="4" key={1}>
-          <Card className="cursor-pointer">
-            <CardHeader className="pb-0">
-              <CardTitle>
-                <div style={{ fontSize: "15px" }}>
-                  {" "}
-                  # <span style={{ fontWeight: "Bold" }}>{1}</span>
-                </div>
-              </CardTitle>
-              <CardTitle>
-                <div style={{ fontSize: "15px" }}>
-                  {" "}
-                  Esperadas:{" "}
-                  <span style={{ fontWeight: "Bold" }}>{esperados}</span>
-                </div>
-              </CardTitle>
-            </CardHeader>
-            <CardBody className="text-center">
-              <CardText>{"ANTIOQUIA"}</CardText>
-              <Progress multi style={{ height: "4vh" }}>
-                <Progress
-                  bar
-                  animated
-                  color="info"
-                  value={getWidhTPercentProgress(publicados, esperados)}
-                >
-                  <span style={{ fontWeight: "bold" }}>{publicados}</span>
-                </Progress>
-                <Progress
-                  bar
-                  animated
-                  color="warning"
-                  value={getWidhTPercentProgress(publicados, sinPublicar)}
-                >
-                  <span style={{ fontWeight: "bold" }}>{sinPublicar}</span>
-                </Progress>
-                <Progress
-                  bar
-                  animated
-                  color="danger"
-                  value={getWidhTPercentProgress(E11certificados, esperados)}
-                >
-                  <span style={{ fontWeight: "bold" }}> {E11certificados}</span>
-                </Progress>
-              </Progress>
-            </CardBody>
-            <CardFooter>
-              <div className="container-flex">
-                <div className="item">
-                  <Badge color="info" pill className="text-truncate">
-                    Publicados
-                  </Badge>
-                </div>
-                <div className="item">
-                  <Badge color="warning" pill className="text-truncate">
-                    Sin publicar
-                  </Badge>
-                </div>
-                <div className="item">
-                  <Badge color="danger" pill className="text-truncate">
-                    E11 certificados
-                  </Badge>
-                </div>
-              </div>
-            </CardFooter>
-          </Card>
-        </Col>
-      </Row>
       <Row>
         <Col sm="4" key={1}>
           <Card className="cursor-pointer">
@@ -514,9 +340,11 @@ const Pruebas = () => {
                   className="m-0"
                   style={{ padding: "0 6px 0 0" }}
                 >
-                  <Badge color="info" pill className="text-truncate full">
-                    Publicados
-                  </Badge>
+                  <div id="publicadas">
+                    <Badge color="info" pill className="text-truncate full">
+                      Publicados
+                    </Badge>
+                  </div>
                 </Col>
                 <Col
                   xs="4"
@@ -549,6 +377,8 @@ const Pruebas = () => {
           </Card>
         </Col>
       </Row>
+      {tootlTips()}
+      {tootlTipsProgress()}
     </>
   );
 };
