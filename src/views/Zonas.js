@@ -42,7 +42,7 @@ const Zonas = () => {
   const [refresh, setRefresh] = useState(false);
 
   // CONSTANTES
-  const { depto, ciudad } = queryString.parse(location.search);
+  const { depto, ciudad, descrip } = queryString.parse(location.search);
 
   // EFFECTS
   useEffect(() => {
@@ -69,9 +69,9 @@ const Zonas = () => {
   }, [depto, ciudad, refresh]);
 
   // FUNCIONES
-  const handleClick = (idDepartamento, idCiudad, idZona) => {
+  const handleClick = (idDepartamento, idCiudad, idZona, nombreZona) => {
     history.push(
-      `/puestos?depto=${idDepartamento}&ciudad=${idCiudad}&zona=${idZona}`
+      `/puestos?depto=${idDepartamento}&ciudad=${idCiudad}&zona=${idZona}&descrip=${nombreZona}`
     );
   };
 
@@ -94,7 +94,7 @@ const Zonas = () => {
     <>
       <Card className="mb-1">
         <CardHeader className="border-bottom">
-          <CardTitle tag="h6">Zonas de ....</CardTitle>
+          <CardTitle tag="h6">Zonas de {descrip}</CardTitle>
         </CardHeader>
 
         <CardHeader className="border-bottom">
@@ -147,7 +147,12 @@ const Zonas = () => {
                   <tr
                     key={index}
                     onClick={() =>
-                      handleClick(depto, ciudad, zona.porcInformado)
+                      handleClick(
+                        depto,
+                        ciudad,
+                        zona.porcInformado,
+                        "nombre zona"
+                      )
                     }
                   >
                     <td>{zona.porcInformado}</td>

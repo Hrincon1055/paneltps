@@ -57,16 +57,11 @@ const DepartamentosCard = () => {
   // FUNCIONES
 
   const handleClick = (idDepartamento) => {
-    console.log("DepartamentosCard LINE 66 =>", idDepartamento);
     history.push(`/ciudades-card?depto=${idDepartamento}`);
   };
   const onSearchChange = (e) => {
-    // setCurrentPage(0);
     setSearch(e.target.value);
   };
-
-  // if (departamentos)
-  //   console.log(filterdSearch(departamentos.data, "descripcion", search));
 
   // RENDER
 

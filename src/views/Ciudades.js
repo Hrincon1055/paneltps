@@ -42,7 +42,7 @@ const Ciudades = () => {
   const [refresh, setRefresh] = useState(false);
 
   // CONSTANTES
-  const { depto } = queryString.parse(location.search);
+  const { depto, descrip } = queryString.parse(location.search);
 
   // EFFECTS
   useEffect(() => {
@@ -69,8 +69,10 @@ const Ciudades = () => {
   }, [depto, refresh]);
 
   // FUNCIONES
-  const handleClick = (idDepartamento, idCiudad) => {
-    history.push(`/zonas?depto=${idDepartamento}&ciudad=${idCiudad}`);
+  const handleClick = (idDepartamento, idCiudad, nombreCiudad) => {
+    history.push(
+      `/zonas?depto=${idDepartamento}&ciudad=${idCiudad}&descrip=${nombreCiudad}`
+    );
   };
 
   const onSearchChange = (e) => {
@@ -92,7 +94,7 @@ const Ciudades = () => {
     <>
       <Card className="mb-1">
         <CardHeader className="border-bottom">
-          <CardTitle tag="h6">Ciudades de ....</CardTitle>
+          <CardTitle tag="h6">Ciudades de {descrip}</CardTitle>
         </CardHeader>
 
         <CardHeader className="border-bottom">
@@ -144,7 +146,9 @@ const Ciudades = () => {
                 (ciudad, index) => (
                   <tr
                     key={index}
-                    onClick={() => handleClick(depto, ciudad.municipio)}
+                    onClick={() =>
+                      handleClick(depto, ciudad.municipio, "nombre ciudad")
+                    }
                   >
                     <td>{ciudad.municipio}</td>
                     <td>{ciudad.descripcion.toUpperCase()}</td>

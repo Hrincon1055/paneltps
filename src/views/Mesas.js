@@ -42,7 +42,9 @@ const Mesas = () => {
   const [refresh, setRefresh] = useState(false);
 
   // CONSTANTES
-  const { depto, ciudad, zona, puesto } = queryString.parse(location.search);
+  const { depto, ciudad, zona, puesto, descrip } = queryString.parse(
+    location.search
+  );
 
   // EFFECTS
   useEffect(() => {
@@ -92,7 +94,7 @@ const Mesas = () => {
     <>
       <Card className="mb-1">
         <CardHeader className="border-bottom">
-          <CardTitle tag="h6">Mesas de ....</CardTitle>
+          <CardTitle tag="h6">Mesas de {descrip}</CardTitle>
         </CardHeader>
 
         <CardHeader className="border-bottom">

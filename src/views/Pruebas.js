@@ -30,7 +30,12 @@ import { toast } from "react-toastify";
 // MIS COMPONENTES
 import { axiosApi } from "../libs/axiosApi";
 import { PATHS_API } from "../utils/constants";
-import { filterdSearch } from "../utils/utils";
+import {
+  filterdSearch,
+  getData,
+  getWidhTPercentProgress,
+  randomInteger,
+} from "../utils/utils";
 import { useAuthentication } from "@hooks/useAuthentication";
 
 // INICIO
@@ -46,31 +51,49 @@ const Pruebas = () => {
   const [tooltipOpen, setTooltipOpen] = useState({
     avance: false,
     refresh: false,
-    publicados: false,
-    sinPublicar: false,
-    e11certificados: false,
   });
   const [basicModal, setBasicModal] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [departamentos, setDepartamentos] = useState("");
 
   // CONSTANTES
   const { depto } = queryString.parse(location.search);
 
-  const esperados = 66;
-  const publicados = 42;
-  const sinPublicar = 24;
-  const E11certificados = 0;
-
   // EFFECTS
-  useEffect(() => {}, [depto]);
+  useEffect(() => {
+    getData("departamento")
+      .then((response) => {
+        if (response.status == 200) {
+          response.data["data"].forEach((element) => {
+            element.tooltipsBadge = {
+              publicados: false,
+              sinPublicar: false,
+              e11certificados: false,
+            };
+          });
+          setDepartamentos(response.data);
+        } else {
+          throw "Ha ocurrido un error";
+        }
+      })
+      .catch((err) => {
+        toast.error("Ha ocurrido un error", err);
+        setDepartamentos(null);
+      });
+  }, [depto]);
 
   const onSearchChange = (e) => {
     setSearch(e.target.value);
   };
 
-  const getWidhTPercentProgress = (value, total) => {
-    return (value / total) * 100;
-  };
+  if (departamentos.data || departamentos) {
+    console.log(departamentos.data);
+    console.log([...departamentos.data]);
+    let data = [...departamentos.data];
+    console.log(data[0].tooltipsBadge.publicados);
+    // console.log(object);
+    // console.log(filterdSearch(departamentos.data, "descripcion", "0"));
+  }
 
   const tootlTips = () => {
     return (
@@ -100,18 +123,60 @@ const Pruebas = () => {
     );
   };
 
-  const tootlTipsProgress = () => {
+  const tootlTipsProgress = (id) => {
     return (
       <>
-        {/* <Tooltip isOpen={true} target="publicadas" toggle={() => {}}>
-          {"publicadas"}
-        </Tooltip> */}
-        {/* <Tooltip isOpen={{}} flip target="e11" toggle={() => {}}>
-          {"e11"}
+        <Tooltip
+          isOpen={departamentos.data[id].tooltipsBadge.publicados}
+          target={`publicadas-${id}`}
+          toggle={() => {
+            let data = { ...departamentos };
+            data["data"][id] = {
+              ...data["data"][id],
+              tooltipsBadge: {
+                publicados: !data["data"][id].tooltipsBadge.publicados,
+              },
+            };
+            setDepartamentos(data);
+          }}
+        >
+          {`publicados: ${departamentos.data[id].publicados}`}
         </Tooltip>
-        <Tooltip isOpen={{}} flip target="sin-publicar" toggle={() => {}}>
-          {"sin-publicar"}
-        </Tooltip> */}
+        <Tooltip
+          isOpen={departamentos.data[id].tooltipsBadge.e11certificados}
+          flip
+          target={`e11-${id}`}
+          toggle={() => {
+            let data = { ...departamentos };
+            data["data"][id] = {
+              ...data["data"][id],
+              tooltipsBadge: {
+                e11certificados:
+                  !data["data"][id].tooltipsBadge.e11certificados,
+              },
+            };
+            setDepartamentos(data);
+          }}
+        >
+          {`e11: ${departamentos.data[id].E11certificados}`}
+        </Tooltip>
+        <Tooltip
+          isOpen={departamentos.data[id].tooltipsBadge.sinPublicar}
+          flip
+          target={`sin-publicar-${id}`}
+          toggle={() => {
+            let data = { ...departamentos };
+            data["data"][id] = {
+              ...data["data"][id],
+              tooltipsBadge: {
+                sinPublicar: !data["data"][id].tooltipsBadge.sinPublicar,
+              },
+            };
+            setDepartamentos(data);
+          }}
+        >
+          {`Sin publicar: ${departamentos.data[id].sinPublicar}`}
+        </Tooltip>
       </>
     );
   };
@@ -242,6 +307,7 @@ const Pruebas = () => {
                   id="search"
                   value={search}
                   onChange={(e) => onSearchChange(e)}
+                  style={{ width: "80vh" }}
                 />
               </Col>
             </Row>
@@ -262,123 +328,143 @@ const Pruebas = () => {
           </CardTitle>
         </CardHeader>
       </Card>
-
-      <Row>
-        <Col sm="4" key={1}>
-          <Card className="cursor-pointer">
-            <CardHeader className="pb-1">
-              <CardTitle>
-                <div style={{ fontSize: "15px" }}>
-                  {" "}
-                  # <span style={{ fontWeight: "Bold" }}>{1}</span>
-                </div>
-              </CardTitle>
-              <CardTitle>
-                <div style={{ fontSize: "15px" }}>
-                  {" "}
-                  Esperadas:{" "}
-                  <span style={{ fontWeight: "Bold" }}>{esperados}</span>
-                </div>
-              </CardTitle>
-            </CardHeader>
-            <CardBody className="text-center">
-              <CardText>{"ANTIOQUIA"}</CardText>
-              <Progress multi style={{ height: "1.157rem" }}>
-                <Progress
-                  bar
-                  animated
-                  color="info"
-                  value={getWidhTPercentProgress(publicados, esperados)}
-                >
-                  <span style={{ fontWeight: "bold" }}>{publicados}</span>
-                </Progress>
-                <Progress
-                  bar
-                  animated
-                  color="warning"
-                  value={getWidhTPercentProgress(publicados, sinPublicar)}
-                >
-                  <span style={{ fontWeight: "bold" }}>{sinPublicar}</span>
-                </Progress>
-                <Progress
-                  bar
-                  animated
-                  color="danger"
-                  value={getWidhTPercentProgress(E11certificados, esperados)}
-                >
-                  <span style={{ fontWeight: "bold" }}> {E11certificados}</span>
-                </Progress>
-              </Progress>
-            </CardBody>
-            <CardFooter>
-              {/*               
-              <div className="container-flex">
-                <div className="item">
-                  <Badge color="info" pill className="text-truncate">
-                    Publicados
-                  </Badge>
-                </div>
-                <div className="item">
-                  <Badge color="warning" pill className="text-truncate">
-                    Sin publicar
-                  </Badge>
-                </div>
-                <div className="item">
-                  <Badge color="danger" pill className="text-truncate">
-                    E11 certificados
-                  </Badge>
-                </div>
-              </div> */}
-
-              <Row className="p-0 m-0">
-                <Col
-                  xs="4"
-                  sm="4"
-                  md="4"
-                  lg="4"
-                  xl="4"
-                  className="m-0"
-                  style={{ padding: "0 6px 0 0" }}
-                >
-                  <div id="publicadas">
-                    <Badge color="info" pill className="text-truncate full">
-                      Publicados
-                    </Badge>
-                  </div>
-                </Col>
-                <Col
-                  xs="4"
-                  sm="4"
-                  md="4"
-                  lg="4"
-                  xl="4"
-                  className="m-0"
-                  style={{ padding: "0 6px 0 0" }}
-                >
-                  <Badge color="warning" pill className="full text-truncate">
-                    Sin publicar
-                  </Badge>
-                </Col>
-                <Col
-                  xs="4"
-                  sm="4"
-                  md="4"
-                  lg="4"
-                  xl="4"
-                  className="m-0"
-                  style={{ padding: "0 6px 0 0" }}
-                >
-                  <Badge color="danger" pill className="text-truncate full">
-                    E11 certificados
-                  </Badge>
-                </Col>
-              </Row>
-            </CardFooter>
-          </Card>
-        </Col>
-      </Row>
       {tootlTips()}
-      {tootlTipsProgress()}
+      <Row>
+        {departamentos &&
+          filterdSearch(departamentos.data, "descripcion", search).map(
+            (element, index) => (
+              <Col sm="4" key={index}>
+                {tootlTipsProgress(index)}
+                <Card className="cursor-pointer">
+                  <CardHeader className="pb-1">
+                    <CardTitle>
+                      <div style={{ fontSize: "15px" }}>
+                        {" "}
+                        #{" "}
+                        <span style={{ fontWeight: "Bold" }}>{index + 1}</span>
+                      </div>
+                    </CardTitle>
+                    <CardTitle>
+                      <div style={{ fontSize: "15px" }}>
+                        {" "}
+                        Esperadas:{" "}
+                        <span style={{ fontWeight: "Bold" }}>
+                          {element.esperados}
+                        </span>
+                      </div>
+                    </CardTitle>
+                  </CardHeader>
+                  <CardBody className="text-center">
+                    <CardText>{element.descripcion}</CardText>
+                    <Progress multi style={{ height: "1.157rem" }}>
+                      <Progress
+                        bar
+                        animated
+                        color="info"
+                        value={getWidhTPercentProgress(
+                          element.publicados,
+                          element.esperados
+                        )}
+                      >
+                        <span style={{ fontWeight: "bold" }}>
+                          {element.publicados}
+                        </span>
+                      </Progress>
+                      <Progress
+                        bar
+                        animated
+                        color="warning"
+                        value={getWidhTPercentProgress(
+                          element.sinPublicar,
+                          element.esperados
+                        )}
+                      >
+                        <span style={{ fontWeight: "bold" }}>
+                          {element.sinPublicar}
+                        </span>
+                      </Progress>
+                      <Progress
+                        bar
+                        animated
+                        color="danger"
+                        value={getWidhTPercentProgress(
+                          element.E11certificados,
+                          element.esperados
+                        )}
+                      >
+                        <span style={{ fontWeight: "bold" }}>
+                          {" "}
+                          {element.E11certificados}
+                        </span>
+                      </Progress>
+                    </Progress>
+                  </CardBody>
+                  <CardFooter>
+                    <Row className="p-0 m-0">
+                      <Col
+                        xs="4"
+                        sm="4"
+                        md="4"
+                        lg="4"
+                        xl="4"
+                        className="m-0"
+                        style={{ padding: "0 6px 0 0" }}
+                      >
+                        <div id={`publicadas-${index}`}>
+                          <Badge
+                            color="info"
+                            pill
+                            className="text-truncate full"
+                          >
+                            Publicados
+                          </Badge>
+                        </div>
+                      </Col>
+                      <Col
+                        xs="4"
+                        sm="4"
+                        md="4"
+                        lg="4"
+                        xl="4"
+                        className="m-0"
+                        style={{ padding: "0 6px 0 0" }}
+                      >
+                        <div id={`sin-publicar-${index}`}>
+                          <Badge
+                            color="warning"
+                            pill
+                            className="full text-truncate"
+                          >
+                            Sin publicar
+                          </Badge>
+                        </div>
+                      </Col>
+                      <Col
+                        xs="4"
+                        sm="4"
+                        md="4"
+                        lg="4"
+                        xl="4"
+                        className="m-0"
+                        style={{ padding: "0 6px 0 0" }}
+                      >
+                        <div id={`e11-${index}`}>
+                          <Badge
+                            color="danger"
+                            pill
+                            className="text-truncate full"
+                          >
+                            E11 certificados
+                          </Badge>
+                        </div>
+                      </Col>
+                    </Row>
+                  </CardFooter>
+                </Card>
+              </Col>
+            )
+          )}
+      </Row>
     </>
   );
 };

@@ -144,8 +144,10 @@ const Home = () => {
   }, [refresh]);
 
   // FUNCIONES
-  const handleClick = (idDepartamento) => {
-    history.push(`/ciudades?depto=${idDepartamento}`);
+  const handleClick = (idDepartamento, nombreDepartamento) => {
+    history.push(
+      `/ciudades?depto=${idDepartamento}&descrip=${nombreDepartamento}`
+    );
   };
   const handleOpenModal = () => {
     setBasicModal(!basicModal);
@@ -244,7 +246,9 @@ const Home = () => {
             {departamentos &&
               filteredDepartamentos().map((departamento, index) => (
                 <tr
-                  onClick={() => handleClick(departamento.codepar)}
+                  onClick={() =>
+                    handleClick(departamento.codepar, "nombre departamento")
+                  }
                   key={index}
                 >
                   <td>{departamento.descripcion.toUpperCase()}</td>

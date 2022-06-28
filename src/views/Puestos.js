@@ -42,7 +42,7 @@ const Puestos = () => {
   const [refresh, setRefresh] = useState(false);
 
   // CONSTANTES
-  const { depto, ciudad, zona } = queryString.parse(location.search);
+  const { depto, ciudad, zona, descrip } = queryString.parse(location.search);
 
   // EFFECTS
   useEffect(() => {
@@ -69,9 +69,15 @@ const Puestos = () => {
   }, [depto, ciudad, zona, refresh]);
 
   // FUNCIONES
-  const handleClick = (idDepartamento, idCiudad, idZona, idPuesto) => {
+  const handleClick = (
+    idDepartamento,
+    idCiudad,
+    idZona,
+    idPuesto,
+    nombrePuesto
+  ) => {
     history.push(
-      `/mesas?depto=${idDepartamento}&ciudad=${idCiudad}&zona=${idZona}&puesto=${idPuesto}`
+      `/mesas?depto=${idDepartamento}&ciudad=${idCiudad}&zona=${idZona}&puesto=${idPuesto}&descrip=${nombrePuesto}`
     );
   };
 
@@ -94,7 +100,7 @@ const Puestos = () => {
     <>
       <Card className="mb-1">
         <CardHeader className="border-bottom">
-          <CardTitle tag="h6">Puestos de ....</CardTitle>
+          <CardTitle tag="h6">Puestos de {descrip}</CardTitle>
         </CardHeader>
 
         <CardHeader className="border-bottom">
@@ -147,7 +153,13 @@ const Puestos = () => {
                   <tr
                     key={index}
                     onClick={() =>
-                      handleClick(depto, ciudad, zona, puesto.municipio)
+                      handleClick(
+                        depto,
+                        ciudad,
+                        zona,
+                        puesto.municipio,
+                        "nombre puesto"
+                      )
                     }
                   >
                     <td>{puesto.municipio}</td>

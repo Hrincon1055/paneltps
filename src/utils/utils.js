@@ -23,3 +23,58 @@ export const filterdSearch = (data, fieldFilter, search = "") => {
     return filterd;
   }
 };
+
+/**
+
+  * Obtiene el porcentaje de un total 
+
+  * @param {[number]} value [ valor que hace parte del 100% ]
+  * @param {[number]} total [ valor total (100%) para sacar el porcentaje]
+  * @return { [number] }  [ porcentaje sin el valor de % ]
+  *
+ */
+export const getWidhTPercentProgress = (value, total) => {
+  return (value / total) * 100;
+};
+
+/**
+  * Obtiene tener un numero aletorio de acuerdo a un rango
+
+  * @param {[number]} min [ valor minimo]
+  * @param {[number]} max [ valor maximo]
+  * @return { [number] }  [ Numero aleatorio]
+  *
+ */
+
+export const randomInteger = (min, max) => {
+  return Math.floor(Math.random() * (max - min + 1)) + min;
+};
+
+export const getData = (route = "ruta") => {
+  return new Promise((resolve, reject) => {
+    if (route.includes("/")) {
+      reject("ha ocurrido un problema");
+    }
+
+    const json = Array.from({ length: 10 }, (v, i) => {
+      let publicados = randomInteger(1000, 50000);
+      let sinPublicar = randomInteger(1000, 50000);
+      let E11certificados = randomInteger(1000, 50000);
+      let esperados = publicados + sinPublicar + E11certificados;
+      return {
+        descripcion: `${route} ${i}`,
+        publicados,
+        sinPublicar,
+        E11certificados,
+        esperados,
+      };
+    });
+
+    setTimeout(() => {
+      resolve({
+        data: { data: json, sumEsperados: "", sumPublicados: "" },
+        status: 200,
+      });
+    }, 2000);
+  });
+};

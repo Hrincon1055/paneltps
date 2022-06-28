@@ -24,7 +24,7 @@ import { useAuthentication } from "@hooks/useAuthentication";
 import { useSelector } from "react-redux";
 import { PATHS_API } from "../utils/constants";
 import { axiosApi } from "../libs/axiosApi";
-import logo from "@src/assets/images/logo/logo_2_tps.png";
+// import logo from "@src/assets/images/logo/logo_tps_dark.png";
 
 // INICIO
 const LoginCover = () => {
@@ -39,8 +39,12 @@ const LoginCover = () => {
   const [errors, setErrors] = useState({ user: false, password: false });
   const [isLoading, setIsLoading] = useState(false);
   // CONSTANTES
-  const illustration = skin === "dark" ? "login_dark.svg" : "login_light.svg",
-    source = require(`@src/assets/images/pages/${illustration}`).default;
+  const illustration = skin === "dark" ? "login_dark.svg" : "login_light.svg";
+  const logo_tps = skin === "dark" ? "logo_tps_dark.png" : "logo_tps_light.png";
+  const source = require(`@src/assets/images/pages/${illustration}`).default;
+  const logo = require(`@src/assets/images/logo/${logo_tps}`).default;
+
+
   // FUNCIONES
   const login = (e) => {
     e.preventDefault();
@@ -73,7 +77,9 @@ const LoginCover = () => {
     <div className="auth-wrapper auth-cover">
       <Row className="auth-inner m-0">
         <Link className="brand-logo" to="/" onClick={(e) => e.preventDefault()}>
-          <img src={logo} alt="logo" />
+          <div style={{height: '100%'}}>
+            <img  style={{width: '60% '}} src={logo} alt="logo" />
+          </div>
           {/* <h2 className="brand-text text-primary ms-1">Visualizador E11</h2> */}
         </Link>
         <Col className="d-none d-lg-flex align-items-center p-5" lg="8" sm="12">

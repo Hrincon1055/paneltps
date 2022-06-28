@@ -25,23 +25,6 @@ WE WILL RELEASE FUTURE UPDATES SO IN ORDER TO NOT OVERWRITE YOUR STYLES IT'S BET
   padding-right: 0 !important;
 }
 
-.container-flex {
-  display: flex;
-  flex-direction: row;
-  padding-right: 2px;
-
-  .item {
-    flex: 1;
-    width: 33.33%;
-    margin-right: 8px;
-
-    .badge {
-      width: 100%;
-      padding-top: 3px;
-    }
-  }
-}
-
 .full.badge {
   width: 100%;
 }
